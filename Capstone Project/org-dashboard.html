@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Organization Dashboard | InternConnect</title>
+  <link rel="stylesheet" href="styles2.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="icon" type="image/x-icon" href="images/logo.png">
+  <style>
+    body { background: #f7f9fc; }
+
+    /* ── Shared layout with student dash ── */
+    .dash-wrapper {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      min-height: calc(100vh - 75px);
+    }
+    .dash-sidebar {
+      background: #fff;
+      border-right: 1px solid #eee;
+      padding: 30px 0;
+      position: sticky;
+      top: 75px;
+      height: calc(100vh - 75px);
+      overflow-y: auto;
+    }
+    .dash-profile { text-align:center; padding:0 20px 24px; border-bottom:1px solid #f0f0f0; margin-bottom:16px; }
+    .org-avatar {
+      width: 72px; height: 72px;
+      background: linear-gradient(135deg, #001A40, #0056FF);
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; color:#fff; margin:0 auto 12px; font-weight:700;
+    }
+    .dash-profile h3 { font-size:1rem; color:#111; margin-bottom:3px; }
+    .dash-profile p  { font-size:0.8rem; color:#888; }
+    .verified-badge {
+      display:inline-flex; align-items:center; gap:5px;
+      background:#e8fff3; color:#0a8a4a;
+      font-size:0.72rem; font-weight:600;
+      padding:3px 8px; border-radius:20px; margin-top:8px;
+    }
+    .dash-nav { padding:0 12px; }
+    .dash-nav-item {
+      display:flex; align-items:center; gap:12px;
+      padding:12px 14px; border-radius:10px; color:#555;
+      font-size:0.92rem; font-weight:500; cursor:pointer;
+      margin-bottom:4px; transition:all 0.2s; text-decoration:none;
+    }
+    .dash-nav-item i { width:18px; text-align:center; font-size:0.9rem; }
+    .dash-nav-item:hover { background:#f5f7f9; color:#0056FF; }
+    .dash-nav-item.active { background:#eef3ff; color:#0056FF; font-weight:600; }
+    .dash-nav-item .badge-count {
+      margin-left:auto; background:#0056FF; color:#fff;
+      font-size:0.7rem; padding:2px 7px; border-radius:20px;
+    }
+    .nav-divider { font-size:0.7rem; text-transform:uppercase; letter-spacing:0.08em; color:#bbb; padding:12px 14px 6px; font-weight:600; }
+
+    .dash-main { padding:32px; max-width:1050px; }
+    .dash-topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:28px; flex-wrap:wrap; gap:12px; }
+    .dash-topbar h1 { font-size:1.6rem; color:#111; }
+    .dash-topbar p  { color:#777; font-size:0.9rem; margin-top:3px; }
+    .btn-post {
+      padding:10px 22px; background:#0056FF; color:#fff;
+      border:none; border-radius:8px; font-weight:600;
+      cursor:pointer; font-size:0.9rem; white-space:nowrap;
+      display:flex; align-items:center; gap:8px;
+    }
+    .btn-post:hover { background:#0046d5; }
+
+    /* ── Stats ── */
+    .stat-row { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:28px; }
+    .stat-card { background:#fff; border:1px solid #eee; border-radius:14px; padding:20px; }
+    .sc-icon { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1rem; margin-bottom:12px; }
+    .sc-blue  { background:#eef3ff; color:#0056FF; }
+    .sc-green { background:#e8fff3; color:#0a8a4a; }
+    .sc-orange{ background:#fff4e6; color:#c0580a; }
+    .sc-purple{ background:#faf0ff; color:#7c3aed; }
+    .stat-card h3 { font-size:1.7rem; color:#111; margin-bottom:2px; }
+    .stat-card p  { font-size:0.8rem; color:#888; }
+
+    /* ── Section Heads ── */
+    .section-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+    .section-head h2 { font-size:1.1rem; color:#111; font-weight:700; }
+    .section-head a  { font-size:0.85rem; color:#0056FF; text-decoration:none; font-weight:600; }
+
+    /* ── Postings Table ── */
+    .table-card { background:#fff; border:1px solid #eee; border-radius:14px; overflow:hidden; margin-bottom:28px; }
+    .data-table { width:100%; border-collapse:collapse; }
+    .data-table th {
+      text-align:left; padding:14px 20px;
+      font-size:0.78rem; text-transform:uppercase;
+      letter-spacing:0.06em; color:#999; background:#fafafa;
+      font-weight:600; border-bottom:1px solid #f0f0f0;
+    }
+    .data-table td { padding:16px 20px; border-bottom:1px solid #f7f7f7; font-size:0.9rem; vertical-align:middle; }
+    .data-table tr:last-child td { border-bottom:none; }
+    .data-table tr:hover td { background:#fafcff; }
+
+    .role-cell h4 { font-weight:600; color:#111; margin-bottom:2px; font-size:0.92rem; }
+    .role-cell p  { font-size:0.78rem; color:#888; }
+
+    .status-badge { display:inline-flex; align-items:center; gap:5px; padding:4px 10px; border-radius:20px; font-size:0.78rem; font-weight:600; }
+    .status-active   { background:#e8fff3; color:#0a8a4a; }
+    .status-closed   { background:#f5f5f5; color:#888; }
+    .status-draft    { background:#fff8e6; color:#b07800; }
+    .status-badge::before { content:''; width:6px; height:6px; border-radius:50%; background:currentColor; }
+
+    .action-btns { display:flex; gap:6px; }
+    .btn-icon {
+      width:32px; height:32px;
+      border:1px solid #eee;
+      border-radius:6px; background:#fff;
+      color:#666; cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      font-size:0.8rem; transition:all 0.2s;
+    }
+    .btn-icon:hover { border-color:#0056FF; color:#0056FF; }
+    .btn-icon.danger:hover { border-color:#e53e3e; color:#e53e3e; }
+
+    /* ── Applicant Cards ── */
+    .two-col { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:28px; }
+    .applicant-list { background:#fff; border:1px solid #eee; border-radius:14px; overflow:hidden; }
+    .list-head {
+      padding:16px 20px; font-weight:700; font-size:0.95rem; color:#111;
+      border-bottom:1px solid #f0f0f0; display:flex; justify-content:space-between; align-items:center;
+    }
+    .list-head a { font-size:0.8rem; color:#0056FF; font-weight:600; text-decoration:none; }
+
+    .applicant-item {
+      display:flex; align-items:center; gap:12px;
+      padding:14px 20px; border-bottom:1px solid #f7f7f7;
+      transition:background 0.15s;
+    }
+    .applicant-item:last-child { border-bottom:none; }
+    .applicant-item:hover { background:#fafcff; }
+    .app-avatar {
+      width:38px; height:38px; border-radius:50%;
+      background:linear-gradient(135deg,#0056FF,#001A40);
+      color:#fff; display:flex; align-items:center; justify-content:center;
+      font-weight:700; font-size:0.8rem; flex-shrink:0;
+    }
+    .app-name  { font-weight:600; font-size:0.88rem; color:#111; margin-bottom:2px; }
+    .app-role-small { font-size:0.76rem; color:#888; }
+    .app-actions { margin-left:auto; display:flex; gap:6px; }
+    .btn-accept {
+      padding:5px 12px; background:#0056FF; color:#fff;
+      border:none; border-radius:6px; font-size:0.76rem;
+      font-weight:600; cursor:pointer;
+    }
+    .btn-accept:hover { background:#0046d5; }
+    .btn-decline {
+      padding:5px 12px; background:#fff; color:#888;
+      border:1px solid #eee; border-radius:6px; font-size:0.76rem;
+      cursor:pointer;
+    }
+    .btn-decline:hover { border-color:#e53e3e; color:#e53e3e; }
+
+    /* ── Post Internship Modal ── */
+    .modal-overlay {
+      display:none; position:fixed; inset:0;
+      background:rgba(0,0,0,0.4); z-index:2000;
+      align-items:center; justify-content:center;
+    }
+    .modal-overlay.open { display:flex; }
+    .modal {
+      background:#fff; border-radius:18px;
+      padding:32px; width:90%; max-width:560px;
+      max-height:90vh; overflow-y:auto;
+      box-shadow:0 20px 60px rgba(0,0,0,0.15);
+      animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp {
+      from { transform:translateY(20px); opacity:0; }
+      to   { transform:translateY(0);    opacity:1; }
+    }
+    .modal-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; }
+    .modal-head h2 { font-size:1.2rem; color:#111; }
+    .btn-close-modal { background:none; border:none; font-size:1.3rem; cursor:pointer; color:#888; }
+    .btn-close-modal:hover { color:#111; }
+    .modal .form-group { margin-bottom:18px; }
+    .modal .form-group label { display:block; font-weight:600; margin-bottom:7px; font-size:0.88rem; }
+    .modal .form-group input,
+    .modal .form-group select,
+    .modal .form-group textarea {
+      width:100%; padding:11px 14px; background:#f5f7f9;
+      border:1px solid #eef0f2; border-radius:8px;
+      font-size:0.92rem; outline:none;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .modal .form-group input:focus,
+    .modal .form-group select:focus,
+    .modal .form-group textarea:focus { border-color:#0056FF; }
+    .modal-two-col { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .btn-post-submit {
+      width:100%; padding:13px; background:#0056FF; color:#fff;
+      border:none; border-radius:8px; font-weight:600;
+      font-size:1rem; cursor:pointer; margin-top:6px;
+    }
+    .btn-post-submit:hover { background:#0046d5; }
+
+    /* ── Analytics Mini ── */
+    .analytics-card { background:#fff; border:1px solid #eee; border-radius:14px; padding:24px; margin-bottom:28px; }
+    .analytics-title { font-weight:700; font-size:1rem; color:#111; margin-bottom:18px; }
+    .chart-bars { display:flex; align-items:flex-end; gap:10px; height:90px; }
+    .bar-wrap { flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; }
+    .bar {
+      width:100%; border-radius:6px 6px 0 0;
+      background:linear-gradient(180deg,#0056FF,#5593ff);
+      transition:height 0.4s ease;
+    }
+    .bar-label { font-size:0.72rem; color:#aaa; }
+    .bar-val   { font-size:0.75rem; color:#555; font-weight:600; }
+
+    /* ── Dashboard Content Sections ── */
+    .dash-content-section {
+      display:none;
+    }
+    .dash-content-section.active {
+      display:block;
+      animation:fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity:0; }
+      to { opacity:1; }
+    }
+
+    /* ── Notification Item ── */
+    .notification-item {
+      background:#fff; border:1px solid #eee; border-radius:10px;
+      padding:16px; margin-bottom:12px; display:flex; gap:12px; align-items:flex-start;
+    }
+    .notification-item.unread { background:#f0f4ff; }
+    .notification-icon {
+      width:40px; height:40px; border-radius:50%;
+      background:#eef3ff; color:#0056FF;
+      display:flex; align-items:center; justify-content:center;
+      font-size:1rem; flex-shrink:0;
+    }
+    .notification-content { flex:1; }
+    .notification-content h4 { font-weight:600; color:#111; margin-bottom:3px; font-size:0.92rem; }
+    .notification-content p { font-size:0.85rem; color:#666; margin-bottom:6px; }
+    .notification-time { font-size:0.75rem; color:#999; }
+    .notification-dismiss { background:none; border:none; color:#ccc; cursor:pointer; padding:0; }
+    .notification-dismiss:hover { color:#999; }
+
+    /* ── Settings Sections ── */
+    .settings-group { background:#fff; border:1px solid #eee; border-radius:10px; padding:20px; margin-bottom:20px; }
+    .settings-group h3 { font-weight:700; color:#111; margin-bottom:16px; font-size:1rem; }
+    .settings-item {
+      display:flex; justify-content:space-between; align-items:center;
+      padding-bottom:12px; margin-bottom:12px; border-bottom:1px solid #f0f0f0;
+    }
+    .settings-item:last-child { border-bottom:none; margin-bottom:0; }
+    .settings-label { font-weight:600; color:#333; font-size:0.9rem; }
+    .settings-label p { font-size:0.8rem; color:#888; margin-top:2px; }
+    .toggle-switch {
+      width:48px; height:28px; background:#ddd;
+      border-radius:14px; cursor:pointer; position:relative;
+      border:none; transition:background 0.3s;
+    }
+    .toggle-switch.active { background:#0056FF; }
+    .toggle-switch::after {
+      content:''; position:absolute; width:24px; height:24px;
+      background:#fff; border-radius:50%; top:2px; left:2px;
+      transition:left 0.3s;
+    }
+    .toggle-switch.active::after { left:22px; }
+
+    @media (max-width:900px) {
+      .dash-wrapper { grid-template-columns:1fr; }
+      .dash-sidebar { position:static; height:auto; border-right:none; border-bottom:1px solid #eee; }
+      .stat-row  { grid-template-columns:repeat(2,1fr); }
+      .two-col   { grid-template-columns:1fr; }
+      .dash-main { padding:20px 16px; }
+      .modal-two-col { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container nav-flex">
+      <div class="logo">
+        <img class="ilogo" src="images/logo.png" alt="InternConnect Logo">
+        <span><strong>InternConnect</strong></span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="internships.html">Internships</a></li>
+        <li><a href="Help.html">Help</a></li>
+      </ul>
+      <div class="nav-account-dropdown">
+        <button class="account-btn" id="accountToggle">
+          <div class="account-avatar" style="background: linear-gradient(135deg, #001A40, #0056FF);">GT</div>
+          <div class="account-info">
+            <div class="account-name">Ghana Tech Lab</div>
+            <div class="account-type">Organization</div>
+          </div>
+          <i class="fa fa-chevron-down"></i>
+        </button>
+        <div class="dropdown-menu" id="accountMenu">
+          <div class="dropdown-header">
+            <span class="account-type-badge org-badge">Organization Account</span>
+          </div>
+          <a href="#" class="dropdown-item" data-action="view-profile" data-target="organization-profile"><i class="fa fa-building"></i> View Organization</a>
+          <a href="#" class="dropdown-item" data-action="settings" data-target="settings"><i class="fa fa-cog"></i> Settings</a>
+          <a href="#" class="dropdown-item" data-action="view-history" data-target="my-postings"><i class="fa fa-file-contract"></i> My Contracts</a>
+          <div class="dropdown-divider"></div>
+          <a href="index.html" class="dropdown-item danger" data-action="logout"><i class="fa fa-sign-out-alt"></i> Logout</a>
+        </div>
+      </div>
+      <div class="mobile-toggle"><i class="fa fa-bars"></i></div>
+    </div>
+  </nav>
+
+  <div class="dash-wrapper">
+
+    <!-- Sidebar -->
+    <aside class="dash-sidebar">
+      <div class="dash-profile">
+        <div class="org-avatar">GT</div>
+        <h3>Ghana Tech Lab</h3>
+        <p>Technology · Accra, Ghana</p>
+        <span class="verified-badge"><i class="fa fa-check-circle"></i> Verified Organization</span>
+      </div>
+      <nav class="dash-nav">
+        <div class="nav-divider">Manage</div>
+        <a href="#" class="dash-nav-item active" data-section="overview"><i class="fa fa-home"></i> Overview</a>
+        <a href="#" class="dash-nav-item" data-section="post-internship"><i class="fa fa-plus-circle"></i> Post Internship</a>
+        <a href="#" class="dash-nav-item" data-section="my-postings"><i class="fa fa-briefcase"></i> My Postings <span class="badge-count">4</span></a>
+        <a href="#" class="dash-nav-item" data-section="applicants"><i class="fa fa-users"></i> Applicants <span class="badge-count">12</span></a>
+        <a href="#" class="dash-nav-item" data-section="analytics"><i class="fa fa-chart-bar"></i> Analytics</a>
+
+        <div class="nav-divider">Account</div>
+        <a href="#" class="dash-nav-item" data-section="organization-profile"><i class="fa fa-building"></i> Organization Profile</a>
+        <a href="#" class="dash-nav-item" data-section="notifications"><i class="fa fa-bell"></i> Notifications <span class="badge-count">3</span></a>
+        <a href="#" class="dash-nav-item" data-section="settings"><i class="fa fa-cog"></i> Settings</a>
+        <a href="index.html" class="dash-nav-item" style="color:#e53e3e;margin-top:8px;"><i class="fa fa-sign-out-alt"></i> Logout</a>
+      </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="dash-main">
+
+      <!-- Overview Section (default) -->
+      <div class="dash-content-section active" id="section-overview">
+
+        <div class="dash-topbar">
+          <div>
+            <h1>Organization Dashboard</h1>
+            <p>Manage your internship postings and applicants</p>
+          </div>
+          <button class="btn-post" id="openPostModal">
+            <i class="fa fa-plus"></i> Post Internship
+          </button>
+        </div>
+
+        <!-- Stats -->
+        <div class="stat-row">
+          <div class="stat-card">
+            <div class="sc-icon sc-blue"><i class="fa fa-briefcase"></i></div>
+            <h3>4</h3>
+            <p>Active Postings</p>
+          </div>
+          <div class="stat-card">
+            <div class="sc-icon sc-orange"><i class="fa fa-users"></i></div>
+            <h3>12</h3>
+            <p>Total Applicants</p>
+          </div>
+          <div class="stat-card">
+            <div class="sc-icon sc-green"><i class="fa fa-check"></i></div>
+            <h3>3</h3>
+            <p>Positions Filled</p>
+          </div>
+          <div class="stat-card">
+            <div class="sc-icon sc-purple"><i class="fa fa-eye"></i></div>
+            <h3>248</h3>
+            <p>Profile Views</p>
+          </div>
+        </div>
+
+        <!-- Analytics -->
+        <div class="analytics-card">
+          <div class="analytics-title">Applications Over the Last 6 Months</div>
+          <div class="chart-bars" id="chartBars">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Postings Table -->
+        <div class="section-head">
+          <h2>My Internship Postings</h2>
+          <a href="#">View all</a>
+        </div>
+        <div class="table-card">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Role</th>
+                <th>Posted</th>
+                <th>Deadline</th>
+                <th>Applicants</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="role-cell">
+                    <h4>Software Engineering Intern</h4>
+                    <p>Full-time · On-site · 3 Months</p>
+                  </div>
+                </td>
+                <td style="color:#666;">Mar 1, 2025</td>
+                <td style="color:#e53e3e;font-weight:600;">Apr 15, 2025</td>
+                <td><strong>7</strong></td>
+                <td><span class="status-badge status-active">Active</span></td>
+                <td>
+                  <div class="action-btns">
+                    <button class="btn-icon" title="Edit"><i class="fa fa-edit"></i></button>
+                    <button class="btn-icon" title="View Applicants"><i class="fa fa-users"></i></button>
+                    <button class="btn-icon danger" title="Delete"><i class="fa fa-trash"></i></button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="role-cell">
+                    <h4>Data Science Intern</h4>
+                    <p>Part-time · Hybrid · 6 Months</p>
+                  </div>
+                </td>
+                <td style="color:#666;">Feb 20, 2025</td>
+                <td style="color:#888;">May 10, 2025</td>
+                <td><strong>3</strong></td>
+                <td><span class="status-badge status-active">Active</span></td>
+                <td>
+                  <div class="action-btns">
+                    <button class="btn-icon" title="Edit"><i class="fa fa-edit"></i></button>
+                    <button class="btn-icon" title="View Applicants"><i class="fa fa-users"></i></button>
+                    <button class="btn-icon danger" title="Delete"><i class="fa fa-trash"></i></button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="role-cell">
+                    <h4>IT Support Intern</h4>
+                    <p>Full-time · On-site · 3 Months</p>
+                  </div>
+                </td>
+                <td style="color:#666;">Jan 15, 2025</td>
+                <td style="color:#888;">Mar 30, 2025</td>
+                <td><strong>2</strong></td>
+                <td><span class="status-badge status-closed">Closed</span></td>
+                <td>
+                  <div class="action-btns">
+                    <button class="btn-icon" title="Edit"><i class="fa fa-edit"></i></button>
+                    <button class="btn-icon" title="View Applicants"><i class="fa fa-users"></i></button>
+                    <button class="btn-icon danger" title="Delete"><i class="fa fa-trash"></i></button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="role-cell">
+                    <h4>Product Design Intern</h4>
+                    <p>Full-time · Remote · 1 Month</p>
+                  </div>
+                </td>
+                <td style="color:#666;">Mar 10, 2025</td>
+                <td style="color:#888;">Apr 30, 2025</td>
+                <td><strong>0</strong></td>
+                <td><span class="status-badge status-draft">Draft</span></td>
+                <td>
+                  <div class="action-btns">
+                    <button class="btn-icon" title="Edit"><i class="fa fa-edit"></i></button>
+                    <button class="btn-icon" title="Publish"><i class="fa fa-paper-plane"></i></button>
+                    <button class="btn-icon danger" title="Delete"><i class="fa fa-trash"></i></button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Applicants + Top Applicants -->
+        <div class="two-col">
+
+          <!-- Recent Applicants -->
+          <div class="applicant-list">
+            <div class="list-head">Recent Applicants <a href="#">View all</a></div>
+
+            <div class="applicant-item">
+              <div class="app-avatar">JO</div>
+              <div>
+                <div class="app-name">Joel Ofori Asare</div>
+                <div class="app-role-small">Software Engineering Intern</div>
+              </div>
+              <div class="app-actions">
+                <button class="btn-accept">Accept</button>
+                <button class="btn-decline">Decline</button>
+              </div>
+            </div>
+
+            <div class="applicant-item">
+              <div class="app-avatar" style="background:linear-gradient(135deg,#7c3aed,#4f46e5);">AA</div>
+              <div>
+                <div class="app-name">Abena Asante</div>
+                <div class="app-role-small">Data Science Intern</div>
+              </div>
+              <div class="app-actions">
+                <button class="btn-accept">Accept</button>
+                <button class="btn-decline">Decline</button>
+              </div>
+            </div>
+
+            <div class="applicant-item">
+              <div class="app-avatar" style="background:linear-gradient(135deg,#0a8a4a,#10b981);">KM</div>
+              <div>
+                <div class="app-name">Kwame Mensah</div>
+                <div class="app-role-small">Software Engineering Intern</div>
+              </div>
+              <div class="app-actions">
+                <button class="btn-accept">Accept</button>
+                <button class="btn-decline">Decline</button>
+              </div>
+            </div>
+
+            <div class="applicant-item">
+              <div class="app-avatar" style="background:linear-gradient(135deg,#c0580a,#f97316);">EA</div>
+              <div>
+                <div class="app-name">Esi Acheampong</div>
+                <div class="app-role-small">Software Engineering Intern</div>
+              </div>
+              <div class="app-actions">
+                <button class="btn-accept">Accept</button>
+                <button class="btn-decline">Decline</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Posting Performance -->
+          <div class="applicant-list">
+            <div class="list-head">Posting Performance</div>
+            <div style="padding:16px 20px;">
+              <div style="margin-bottom:18px;">
+                <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                  <span style="font-size:0.88rem;font-weight:600;color:#111;">Software Eng. Intern</span>
+                  <span style="font-size:0.82rem;color:#0056FF;font-weight:600;">7 applicants</span>
+                </div>
+                <div style="background:#f0f4ff;border-radius:20px;height:8px;overflow:hidden;">
+                  <div style="height:100%;width:70%;background:linear-gradient(90deg,#0056FF,#5593ff);border-radius:20px;"></div>
+                </div>
+              </div>
+              <div style="margin-bottom:18px;">
+                <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                  <span style="font-size:0.88rem;font-weight:600;color:#111;">Data Science Intern</span>
+                  <span style="font-size:0.82rem;color:#7c3aed;font-weight:600;">3 applicants</span>
+                </div>
+                <div style="background:#f5f0ff;border-radius:20px;height:8px;overflow:hidden;">
+                  <div style="height:100%;width:30%;background:linear-gradient(90deg,#7c3aed,#a78bfa);border-radius:20px;"></div>
+                </div>
+              </div>
+              <div style="margin-bottom:18px;">
+                <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                  <span style="font-size:0.88rem;font-weight:600;color:#111;">IT Support Intern</span>
+                  <span style="font-size:0.82rem;color:#0a8a4a;font-weight:600;">2 applicants</span>
+                </div>
+                <div style="background:#f0fff4;border-radius:20px;height:8px;overflow:hidden;">
+                  <div style="height:100%;width:20%;background:linear-gradient(90deg,#0a8a4a,#34d399);border-radius:20px;"></div>
+                </div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                  <span style="font-size:0.88rem;font-weight:600;color:#999;">Product Design (Draft)</span>
+                  <span style="font-size:0.82rem;color:#aaa;font-weight:600;">0 applicants</span>
+                </div>
+                <div style="background:#f5f5f5;border-radius:20px;height:8px;overflow:hidden;">
+                  <div style="height:100%;width:0%;background:#ddd;border-radius:20px;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Organization Profile Section -->
+      <div class="dash-content-section" id="section-organization-profile">
+        <div class="dash-topbar">
+          <div>
+            <h1>Organization Profile</h1>
+            <p>Manage your organization's information and branding</p>
+          </div>
+        </div>
+
+        <div style="max-width:600px;">
+          <div class="table-card" style="padding:24px;">
+            <h2 style="font-size:1.2rem; margin-bottom:24px; color:#111;">Profile Information</h2>
+            <form id="profileForm">
+              <div class="form-group">
+                <label>Organization Name</label>
+                <input type="text" value="Ghana Tech Lab" required>
+              </div>
+              <div class="form-group">
+                <label>Industry</label>
+                <input type="text" value="Technology" required>
+              </div>
+              <div class="modal-two-col">
+                <div class="form-group">
+                  <label>City</label>
+                  <input type="text" value="Accra" required>
+                </div>
+                <div class="form-group">
+                  <label>Country</label>
+                  <input type="text" value="Ghana" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Company Email</label>
+                <input type="email" value="info@ghanatechlab.com" required>
+              </div>
+              <div class="form-group">
+                <label>Phone Number</label>
+                <input type="tel" value="+233 XXX XXX XXX" required>
+              </div>
+              <div class="form-group">
+                <label>Company Website</label>
+                <input type="url" value="https://ghanatechlab.com" required>
+              </div>
+              <div class="form-group">
+                <label>About Your Organization</label>
+                <textarea rows="4" placeholder="Tell us about your organization...">Ghana Tech Lab is a leading technology company focused on innovation and digital transformation in Africa.</textarea>
+              </div>
+              <button type="submit" class="btn-post" style="width:100%; margin-top:20px; cursor: pointer;">Save Changes</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notifications Section -->
+      <div class="dash-content-section" id="section-notifications">
+        <div class="dash-topbar">
+          <div>
+            <h1>Notifications</h1>
+            <p>Stay updated with your organization activity</p>
+          </div>
+          <button class="btn-post" id="clearNotifications" style="cursor:pointer;">Clear All</button>
+        </div>
+
+        <div style="max-width:600px;">
+          <div class="notification-item unread">
+            <div class="notification-icon"><i class="fa fa-user-plus"></i></div>
+            <div class="notification-content">
+              <h4>New Application Received</h4>
+              <p>Joel Ofori Asare applied for Software Engineering Intern position</p>
+              <div class="notification-time">2 hours ago</div>
+            </div>
+            <button class="notification-dismiss" title="Dismiss"><i class="fa fa-times"></i></button>
+          </div>
+
+          <div class="notification-item unread">
+            <div class="notification-icon" style="background:#e8f8f3; color:#0a8a4a;"><i class="fa fa-check-circle"></i></div>
+            <div class="notification-content">
+              <h4>Application Accepted</h4>
+              <p>Abena Asante accepted your offer for Data Science Intern position</p>
+              <div class="notification-time">5 hours ago</div>
+            </div>
+            <button class="notification-dismiss" title="Dismiss"><i class="fa fa-times"></i></button>
+          </div>
+
+          <div class="notification-item unread">
+            <div class="notification-icon" style="background:#fff4e6; color:#c0580a;"><i class="fa fa-calendar-alt"></i></div>
+            <div class="notification-content">
+              <h4>Posting Deadline Approaching</h4>
+              <p>Software Engineering Intern position deadline is in 3 days</p>
+              <div class="notification-time">1 day ago</div>
+            </div>
+            <button class="notification-dismiss" title="Dismiss"><i class="fa fa-times"></i></button>
+          </div>
+
+          <div class="notification-item">
+            <div class="notification-icon" style="background:#f5f0ff; color:#7c3aed;"><i class="fa fa-info-circle"></i></div>
+            <div class="notification-content">
+              <h4>Profile Verified</h4>
+              <p>Your organization profile has been verified and approved</p>
+              <div class="notification-time">3 days ago</div>
+            </div>
+            <button class="notification-dismiss" title="Dismiss"><i class="fa fa-times"></i></button>
+          </div>
+
+          <div class="notification-item">
+            <div class="notification-icon" style="background:#eef3ff; color:#0056FF;"><i class="fa fa-bell"></i></div>
+            <div class="notification-content">
+              <h4>Post Successfully Published</h4>
+              <p>Your Product Design Intern position has been published</p>
+              <div class="notification-time">1 week ago</div>
+            </div>
+            <button class="notification-dismiss" title="Dismiss"><i class="fa fa-times"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Section -->
+      <div class="dash-content-section" id="section-settings">
+        <div class="dash-topbar">
+          <div>
+            <h1>Settings</h1>
+            <p>Manage your account and application preferences</p>
+          </div>
+        </div>
+
+        <div style="max-width:600px;">
+          <div class="settings-group">
+            <h3><i class="fa fa-envelope"></i> Email &amp; Notifications</h3>
+            <div class="settings-item">
+              <div class="settings-label">
+                <div>New Applications</div>
+                <p>Receive email when applicants apply for your positions</p>
+              </div>
+              <button class="toggle-switch active" data-setting="email-applications"></button>
+            </div>
+            <div class="settings-item">
+              <div class="settings-label">
+                <div>Posting Reminders</div>
+                <p>Get reminders about upcoming deadlines</p>
+              </div>
+              <button class="toggle-switch active" data-setting="email-reminders"></button>
+            </div>
+            <div class="settings-item">
+              <div class="settings-label">
+                <div>Weekly Summary</div>
+                <p>Receive a weekly summary of your activity</p>
+              </div>
+              <button class="toggle-switch" data-setting="email-summary"></button>
+            </div>
+            <div class="settings-item">
+              <div class="settings-label">
+                <div>Platform Updates</div>
+                <p>Get notified about new features and updates</p>
+              </div>
+              <button class="toggle-switch active" data-setting="email-updates"></button>
+            </div>
+          </div>
+
+          <div class="settings-group">
+            <h3><i class="fa fa-lock"></i> Privacy &amp; Security</h3>
+            <div class="settings-item">
+              <div class="settings-label">
+                <div>Profile Visibility</div>
+                <p>Allow students to view your organization profile</p>
+              </div>
+              <button class="toggle-switch active" data-setting="profile-visibility"></button>
+            </div>
+            <div class="settings-item">
+              <div class="settings-label">
+                <div>Show Email Address</div>
+                <p>Display your email on your public profile</p>
+              </div>
+              <button class="toggle-switch" data-setting="show-email"></button>
+            </div>
+            <div class="settings-item">
+              <div class="settings-label">
+                <div>Two-Factor Authentication</div>
+                <p>Add extra security to your account</p>
+              </div>
+              <button class="toggle-switch" data-setting="two-factor"></button>
+            </div>
+          </div>
+
+          <div class="settings-group">
+            <h3><i class="fa fa-user-cog"></i> Account Management</h3>
+            <div style="padding:0;">
+              <button class="btn-post" style="width:100%; background:#e53e3e; cursor:pointer;">Delete Account</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- My Postings Section -->
+      <div class="dash-content-section" id="section-my-postings">
+        <div class="dash-topbar">
+          <div>
+            <h1>My Internship Postings</h1>
+            <p>View and manage all your internship postings</p>
+          </div>
+          <button class="btn-post" id="openPostModal2" style="cursor:pointer;">
+            <i class="fa fa-plus"></i> Post New
+          </button>
+        </div>
+
+        <div class="table-card">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Role</th>
+                <th>Posted</th>
+                <th>Deadline</th>
+                <th>Applicants</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="role-cell">
+                    <h4>Software Engineering Intern</h4>
+                    <p>Full-time · On-site · 3 Months</p>
+                  </div>
+                </td>
+                <td style="color:#666;">Mar 1, 2025</td>
+                <td style="color:#e53e3e;font-weight:600;">Apr 15, 2025</td>
+                <td><strong>7</strong></td>
+                <td><span class="status-badge status-active">Active</span></td>
+                <td>
+                  <div class="action-btns">
+                    <button class="btn-icon" title="Edit"><i class="fa fa-edit"></i></button>
+                    <button class="btn-icon" title="View Applicants"><i class="fa fa-users"></i></button>
+                    <button class="btn-icon danger" title="Delete"><i class="fa fa-trash"></i></button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="role-cell">
+                    <h4>Data Science Intern</h4>
+                    <p>Part-time · Hybrid · 6 Months</p>
+                  </div>
+                </td>
+                <td style="color:#666;">Feb 20, 2025</td>
+                <td style="color:#888;">May 10, 2025</td>
+                <td><strong>3</strong></td>
+                <td><span class="status-badge status-active">Active</span></td>
+                <td>
+                  <div class="action-btns">
+                    <button class="btn-icon" title="Edit"><i class="fa fa-edit"></i></button>
+                    <button class="btn-icon" title="View Applicants"><i class="fa fa-users"></i></button>
+                    <button class="btn-icon danger" title="Delete"><i class="fa fa-trash"></i></button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="role-cell">
+                    <h4>IT Support Intern</h4>
+                    <p>Full-time · On-site · 3 Months</p>
+                  </div>
+                </td>
+                <td style="color:#666;">Jan 15, 2025</td>
+                <td style="color:#888;">Mar 30, 2025</td>
+                <td><strong>2</strong></td>
+                <td><span class="status-badge status-closed">Closed</span></td>
+                <td>
+                  <div class="action-btns">
+                    <button class="btn-icon" title="Edit"><i class="fa fa-edit"></i></button>
+                    <button class="btn-icon" title="View Applicants"><i class="fa fa-users"></i></button>
+                    <button class="btn-icon danger" title="Delete"><i class="fa fa-trash"></i></button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="role-cell">
+                    <h4>Product Design Intern</h4>
+                    <p>Full-time · Remote · 1 Month</p>
+                  </div>
+                </td>
+                <td style="color:#666;">Mar 10, 2025</td>
+                <td style="color:#888;">Apr 30, 2025</td>
+                <td><strong>0</strong></td>
+                <td><span class="status-badge status-draft">Draft</span></td>
+                <td>
+                  <div class="action-btns">
+                    <button class="btn-icon" title="Edit"><i class="fa fa-edit"></i></button>
+                    <button class="btn-icon" title="Publish"><i class="fa fa-paper-plane"></i></button>
+                    <button class="btn-icon danger" title="Delete"><i class="fa fa-trash"></i></button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Applicants Section -->
+      <div class="dash-content-section" id="section-applicants">
+        <div class="dash-topbar">
+          <div>
+            <h1>Applicants</h1>
+            <p>Review and manage applications from interested candidates</p>
+          </div>
+        </div>
+
+        <div style="max-width:800px;">
+          <div class="table-card">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Position</th>
+                  <th>Applied Date</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                      <div class="app-avatar" style="width:36px; height:36px;">JO</div>
+                      <div>Joel Ofori Asare</div>
+                    </div>
+                  </td>
+                  <td>Software Engineering Intern</td>
+                  <td style="color:#666;">Mar 25, 2025</td>
+                  <td><span class="status-badge status-active" style="background:#e8f8f3; color:#0a8a4a;">Reviewed</span></td>
+                  <td>
+                    <div class="action-btns">
+                      <button class="btn-accept" style="padding:5px 12px;">Accept</button>
+                      <button class="btn-decline">Decline</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                      <div class="app-avatar" style="width:36px; height:36px; background:linear-gradient(135deg,#7c3aed,#4f46e5);">AA</div>
+                      <div>Abena Asante</div>
+                    </div>
+                  </td>
+                  <td>Data Science Intern</td>
+                  <td style="color:#666;">Mar 22, 2025</td>
+                  <td><span class="status-badge status-active" style="background:#e8f8f3; color:#0a8a4a;">Accepted</span></td>
+                  <td>
+                    <div class="action-btns">
+                      <button class="btn-icon" title="View Profile"><i class="fa fa-eye"></i></button>
+                      <button class="btn-icon" title="Remove"><i class="fa fa-trash"></i></button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                      <div class="app-avatar" style="width:36px; height:36px; background:linear-gradient(135deg,#0a8a4a,#10b981);">KM</div>
+                      <div>Kwame Mensah</div>
+                    </div>
+                  </td>
+                  <td>Software Engineering Intern</td>
+                  <td style="color:#666;">Mar 20, 2025</td>
+                  <td><span class="status-badge status-draft" style="background:#f5f5f5; color:#888;">Pending</span></td>
+                  <td>
+                    <div class="action-btns">
+                      <button class="btn-accept" style="padding:5px 12px;">Accept</button>
+                      <button class="btn-decline">Decline</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                      <div class="app-avatar" style="width:36px; height:36px; background:linear-gradient(135deg,#c0580a,#f97316);">EA</div>
+                      <div>Esi Acheampong</div>
+                    </div>
+                  </td>
+                  <td>Software Engineering Intern</td>
+                  <td style="color:#666;">Mar 18, 2025</td>
+                  <td><span class="status-badge status-closed" style="background:#ffe8e8; color:#e53e3e;">Declined</span></td>
+                  <td>
+                    <div class="action-btns">
+                      <button class="btn-icon" title="View Profile"><i class="fa fa-eye"></i></button>
+                      <button class="btn-icon" title="Remove"><i class="fa fa-trash"></i></button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analytics Section -->
+      <div class="dash-content-section" id="section-analytics">
+        <div class="dash-topbar">
+          <div>
+            <h1>Analytics</h1>
+            <p>Track performance metrics for your internship postings</p>
+          </div>
+        </div>
+
+        <div class="stat-row" style="margin-bottom:28px;">
+          <div class="stat-card">
+            <div class="sc-icon sc-blue"><i class="fa fa-eye"></i></div>
+            <h3>248</h3>
+            <p>Total Views</p>
+          </div>
+          <div class="stat-card">
+            <div class="sc-icon sc-orange"><i class="fa fa-mouse"></i></div>
+            <h3>156</h3>
+            <p>Profile Clicks</p>
+          </div>
+          <div class="stat-card">
+            <div class="sc-icon sc-green"><i class="fa fa-file-alt"></i></div>
+            <h3>12</h3>
+            <p>Total Applications</p>
+          </div>
+          <div class="stat-card">
+            <div class="sc-icon sc-purple"><i class="fa fa-check"></i></div>
+            <h3>3</h3>
+            <p>Positions Filled</p>
+          </div>
+        </div>
+
+        <!-- Analytics by Posting -->
+        <div class="section-head">
+          <h2>Performance by Posting</h2>
+        </div>
+        <div class="table-card">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Position</th>
+                <th>Views</th>
+                <th>Applications</th>
+                <th>Conversion %</th>
+                <th>Filled</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight:600;">Software Engineering Intern</td>
+                <td><strong>152</strong></td>
+                <td><strong>7</strong></td>
+                <td style="color:#0056FF;"><strong>4.6%</strong></td>
+                <td><span class="status-badge status-active">Yes</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;">Data Science Intern</td>
+                <td><strong>68</strong></td>
+                <td><strong>3</strong></td>
+                <td style="color:#0056FF;"><strong>4.4%</strong></td>
+                <td><span class="status-badge status-active">Yes</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;">IT Support Intern</td>
+                <td><strong>28</strong></td>
+                <td><strong>2</strong></td>
+                <td style="color:#0056FF;"><strong>7.1%</strong></td>
+                <td><span class="status-badge status-closed">No</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Trending -->
+        <div style="margin-top:28px;">
+          <div class="section-head">
+            <h2>Trending Metrics</h2>
+          </div>
+          <div class="analytics-card">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;">
+              <div>
+                <h3 style="font-weight:700; font-size:0.95rem; color:#111; margin-bottom:12px;">Views This Week</h3>
+                <div style="font-size:2rem; color:#0056FF; font-weight:700; margin-bottom:4px;">89</div>
+                <p style="font-size:0.85rem; color:#0a8a4a;"><i class="fa fa-arrow-up"></i> +12% from last week</p>
+              </div>
+              <div>
+                <h3 style="font-weight:700; font-size:0.95rem; color:#111; margin-bottom:12px;">Applications This Week</h3>
+                <div style="font-size:2rem; color:#7c3aed; font-weight:700; margin-bottom:4px;">4</div>
+                <p style="font-size:0.85rem; color:#0a8a4a;"><i class="fa fa-arrow-up"></i> +50% from last week</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Post Internship Modal -->
+  <div class="modal-overlay" id="postModal">
+    <div class="modal">
+      <div class="modal-head">
+        <h2>Post New Internship</h2>
+        <button class="btn-close-modal" id="closeModal">&times;</button>
+      </div>
+      <form id="postForm">
+        <div class="form-group">
+          <label>Job Title</label>
+          <input type="text" placeholder="e.g., Software Engineering Intern" required>
+        </div>
+        <div class="modal-two-col">
+          <div class="form-group">
+            <label>Location</label>
+            <input type="text" placeholder="e.g., Accra, Ghana" required>
+          </div>
+          <div class="form-group">
+            <label>Work Mode</label>
+            <select required>
+              <option value="">Select…</option>
+              <option>On-site</option>
+              <option>Remote</option>
+              <option>Hybrid</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-two-col">
+          <div class="form-group">
+            <label>Duration</label>
+            <select required>
+              <option value="">Select…</option>
+              <option>1 Month</option>
+              <option>3 Months</option>
+              <option>6 Months</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Application Deadline</label>
+            <input type="date" required>
+          </div>
+        </div>
+        <div class="modal-two-col">
+          <div class="form-group">
+            <label>Compensation</label>
+            <select>
+              <option>Paid</option>
+              <option>Unpaid</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Field / Industry</label>
+            <select required>
+              <option value="">Select…</option>
+              <option>Technology</option>
+              <option>Finance</option>
+              <option>Engineering</option>
+              <option>Health</option>
+              <option>Marketing</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Required Skills (comma-separated)</label>
+          <input type="text" placeholder="e.g., Python, React, Communication">
+        </div>
+        <div class="form-group">
+          <label>Description &amp; Requirements</label>
+          <textarea rows="4" placeholder="Describe the role, responsibilities, and what you're looking for…" required></textarea>
+        </div>
+        <button type="submit" class="btn-post-submit">Publish Internship</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="index.js"></script>
+  <script>
+    // Navigation Setup
+    function setupNav() {
+      const navItems = document.querySelectorAll('.dash-nav-item[data-section]');
+      
+      navItems.forEach(navItem => {
+        navItem.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          const sectionValue = this.getAttribute('data-section');
+          
+          // Special case for post-internship
+          if (sectionValue === 'post-internship') {
+            const modal = document.getElementById('postModal');
+            if (modal) {
+              modal.classList.add('open');
+            }
+            return;
+          }
+          
+          // Remove active from all
+          document.querySelectorAll('.dash-nav-item').forEach(item => {
+            item.classList.remove('active');
+          });
+          document.querySelectorAll('.dash-content-section').forEach(section => {
+            section.classList.remove('active');
+          });
+          
+          // Add active to this
+          this.classList.add('active');
+          
+          // Show section
+          const section = document.getElementById('section-' + sectionValue);
+          if (section) {
+            section.classList.add('active');
+          }
+        });
+      });
+    }
+
+    // Initialize
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', setupNav);
+    } else {
+      setupNav();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // ── Modal open/close ──
+      const modal = document.getElementById('postModal');
+      const openPostModal = document.getElementById('openPostModal');
+      const openPostModal2 = document.getElementById('openPostModal2');
+      const closeModal = document.getElementById('closeModal');
+      
+      if (modal && openPostModal) {
+        openPostModal.addEventListener('click', (e) => {
+          e.preventDefault();
+          modal.classList.add('open');
+        });
+      }
+      
+      if (modal && openPostModal2) {
+        openPostModal2.addEventListener('click', (e) => {
+          e.preventDefault();
+          modal.classList.add('open');
+        });
+      }
+      
+      if (modal && closeModal) {
+        closeModal.addEventListener('click', (e) => {
+          e.preventDefault();
+          modal.classList.remove('open');
+        });
+      }
+      
+      if (modal) {
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            modal.classList.remove('open');
+          }
+        });
+      }
+
+      // ── Post form submit ──
+      const postForm = document.getElementById('postForm');
+      if (postForm) {
+        const modal = document.getElementById('postModal');
+        postForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const btn = e.target.querySelector('button[type="submit"]');
+          btn.textContent = 'Publishing…';
+          btn.disabled = true;
+          setTimeout(() => {
+            if (modal) modal.classList.remove('open');
+            btn.textContent = 'Publish Internship';
+            btn.disabled = false;
+            // Simple toast
+            const t = document.createElement('div');
+            t.className = 'ic-toast ic-toast--show';
+            t.textContent = 'Internship posted successfully!';
+            document.body.appendChild(t);
+            setTimeout(() => t.remove(), 3500);
+          }, 900);
+        });
+      }
+
+      // ── Organization Profile Form ──
+      const profileForm = document.getElementById('profileForm');
+      if (profileForm) {
+        profileForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const btn = e.target.querySelector('button[type="submit"]');
+          btn.textContent = 'Saving…';
+          btn.disabled = true;
+          setTimeout(() => {
+            btn.textContent = 'Save Changes';
+            btn.disabled = false;
+            // Simple toast
+            const t = document.createElement('div');
+            t.className = 'ic-toast ic-toast--show';
+            t.textContent = 'Profile updated successfully!';
+            document.body.appendChild(t);
+            setTimeout(() => t.remove(), 3500);
+          }, 800);
+        });
+      }
+
+      // ── Notifications - Dismiss & Clear All ──
+      const dismissButtons = document.querySelectorAll('.notification-dismiss');
+      dismissButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const notifItem = e.target.closest('.notification-item');
+          notifItem.style.opacity = '0';
+          setTimeout(() => notifItem.remove(), 300);
+        });
+      });
+
+      const clearNotificationsBtn = document.getElementById('clearNotifications');
+      if (clearNotificationsBtn) {
+        clearNotificationsBtn.addEventListener('click', () => {
+          const notifications = document.querySelectorAll('.notification-item');
+          notifications.forEach((notif, index) => {
+            setTimeout(() => {
+              notif.style.opacity = '0';
+              setTimeout(() => notif.remove(), 300);
+            }, index * 100);
+          });
+        });
+      }
+
+      // ── Settings - Toggle Switches ──
+      const toggleSwitches = document.querySelectorAll('.toggle-switch');
+      toggleSwitches.forEach(toggle => {
+        toggle.addEventListener('click', (e) => {
+          e.preventDefault();
+          toggle.classList.toggle('active');
+        });
+      });
+
+      // ── Accept/Decline buttons ──
+      document.querySelectorAll('.btn-accept').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const item = this.closest('.applicant-item');
+          const name = item.querySelector('.app-name').textContent;
+          this.textContent = 'Accepted';
+          this.style.background = '#0a8a4a';
+          this.nextElementSibling.style.display = 'none';
+        });
+      });
+      document.querySelectorAll('.btn-decline').forEach(btn => {
+        btn.addEventListener('click', function() {
+          this.closest('.applicant-item').style.opacity = '0.4';
+          this.textContent = 'Declined';
+        });
+      });
+
+      // ── Simple bar chart ──
+      const data = [
+        { month: 'Oct', val: 2 },
+        { month: 'Nov', val: 4 },
+        { month: 'Dec', val: 3 },
+        { month: 'Jan', val: 6 },
+        { month: 'Feb', val: 5 },
+        { month: 'Mar', val: 12 },
+      ];
+      const maxVal = Math.max(...data.map(d => d.val));
+      const container = document.getElementById('chartBars');
+      data.forEach(d => {
+        const pct = Math.round((d.val / maxVal) * 100);
+        container.innerHTML += `
+          <div class="bar-wrap">
+            <div class="bar-val">${d.val}</div>
+            <div class="bar" style="height:${pct}%"></div>
+            <div class="bar-label">${d.month}</div>
+          </div>`;
+      });
+    });
+  </script>
+  <script src="index1.js"></script>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saved Internships | InternConnect</title>
+  <link rel="stylesheet" href="styles1.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="icon" type="image/x-icon" href="images/logo.png">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container nav-flex">
+      <div class="logo">
+        <img class="ilogo" src="images/logo.png" alt="InternConnect Logo">
+        <span><strong>InternConnect</strong></span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="internships.html">Internships</a></li>
+        <li><a href="Help.html">Help</a></li>
+      </ul>
+      <div class="nav-auth" style="gap:12px;">
+        <span style="font-size:0.9rem;color:#555;">Hi, <strong>Joel</strong></span>
+        <a href="index.html" class="login-text" style="color:#e53e3e;">Logout</a>
+      </div>
+      <div class="mobile-toggle"><i class="fa fa-bars"></i></div>
+    </div>
+  </nav>
+
+  <div class="dash-wrapper">
+
+    <!-- Sidebar -->
+    <aside class="dash-sidebar">
+      <div class="dash-profile">
+        <div class="avatar">JO</div>
+        <h3>Joel Ofori Asare</h3>
+        <p>Computer Science · Level 200</p>
+        <div class="profile-completion">
+          <div class="profile-completion-bar"></div>
+        </div>
+        <div class="completion-label">Profile 65% complete</div>
+      </div>
+
+      <nav class="dash-nav">
+        <div class="nav-divider">Main</div>
+        <a href="student-dashboard.html" class="dash-nav-item"><i class="fa fa-home"></i> Overview</a>
+        <a href="internships.html" class="dash-nav-item"><i class="fa fa-search"></i> Browse Internships</a>
+        <a href="applications.html" class="dash-nav-item"><i class="fa fa-file-alt"></i> My Applications <span class="badge-count">3</span></a>
+        <a href="saved.html" class="dash-nav-item active"><i class="fa fa-heart"></i> Saved <span class="badge-count">5</span></a>
+
+        <div class="nav-divider">Account</div>
+        <a href="profile.html" class="dash-nav-item"><i class="fa fa-user"></i> My Profile</a>
+        <a href="notifications.html" class="dash-nav-item"><i class="fa fa-bell"></i> Notifications <span class="badge-count">2</span></a>
+        <a href="settings.html" class="dash-nav-item"><i class="fa fa-cog"></i> Settings</a>
+        <a href="index.html" class="dash-nav-item" style="color:#e53e3e;margin-top:8px;"><i class="fa fa-sign-out-alt"></i> Logout</a>
+      </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="dash-main">
+
+      <!-- Top Bar -->
+      <div class="dash-topbar">
+        <div>
+          <h1>Saved Internships ❤️</h1>
+          <p>Review internships you've bookmarked for later</p>
+        </div>
+        <button class="btn-browse" onclick="window.location.href='internships.html'">
+          <i class="fa fa-search"></i> Browse More
+        </button>
+      </div>
+
+      <!-- Saved Items -->
+      <div class="applications-card">
+        <div class="saved-items-grid">
+          
+          <!-- Saved Item -->
+          <div class="saved-item-card">
+            <div class="saved-header">
+              <div class="saved-logo" style="background:#f0fff4;color:#0a8a4a;">SG</div>
+              <button class="btn-save-remove" title="Remove from saved">
+                <i class="fa fa-heart" style="color:#e53e3e;"></i>
+              </button>
+            </div>
+            <h3>Backend Developer Intern</h3>
+            <p class="company-name">Stanbic Ghana</p>
+            <p class="job-details">
+              <i class="fa fa-map-marker"></i> Accra · 
+              <i class="fa fa-calendar"></i> Closes Apr 20
+            </p>
+            <p class="description">Build robust backend systems and work with experienced developers on real-world projects.</p>
+            <div class="saved-actions">
+              <button class="btn-view">View Details</button>
+              <button class="btn-apply">Apply Now</button>
+            </div>
+          </div>
+
+          <!-- Saved Item -->
+          <div class="saved-item-card">
+            <div class="saved-header">
+              <div class="saved-logo" style="background:#fff8e6;color:#b07800;">AP</div>
+              <button class="btn-save-remove" title="Remove from saved">
+                <i class="fa fa-heart" style="color:#e53e3e;"></i>
+              </button>
+            </div>
+            <h3>App Developer Intern</h3>
+            <p class="company-name">Appzone Group</p>
+            <p class="job-details">
+              <i class="fa fa-map-marker"></i> Tema · 
+              <i class="fa fa-calendar"></i> Closes May 15
+            </p>
+            <p class="description">Develop mobile and web applications using modern technologies and best practices.</p>
+            <div class="saved-actions">
+              <button class="btn-view">View Details</button>
+              <button class="btn-apply">Apply Now</button>
+            </div>
+          </div>
+
+          <!-- Saved Item -->
+          <div class="saved-item-card">
+            <div class="saved-header">
+              <div class="saved-logo" style="background:#eef3ff;color:#0056FF;">AM</div>
+              <button class="btn-save-remove" title="Remove from saved">
+                <i class="fa fa-heart" style="color:#e53e3e;"></i>
+              </button>
+            </div>
+            <h3>ML Research Intern</h3>
+            <p class="company-name">Amalitech Ghana</p>
+            <p class="job-details">
+              <i class="fa fa-map-marker"></i> Accra · 
+              <i class="fa fa-calendar"></i> Closes Jun 1
+            </p>
+            <p class="description">Contribute to cutting-edge machine learning research and implementation projects.</p>
+            <div class="saved-actions">
+              <button class="btn-view">View Details</button>
+              <button class="btn-apply">Apply Now</button>
+            </div>
+          </div>
+
+          <!-- Saved Item -->
+          <div class="saved-item-card">
+            <div class="saved-header">
+              <div class="saved-logo" style="background:#faf0ff;color:#7c3aed;">KN</div>
+              <button class="btn-save-remove" title="Remove from saved">
+                <i class="fa fa-heart" style="color:#e53e3e;"></i>
+              </button>
+            </div>
+            <h3>IT Support Intern</h3>
+            <p class="company-name">KNUST ICT Directorate</p>
+            <p class="job-details">
+              <i class="fa fa-map-marker"></i> Kumasi · 
+              <i class="fa fa-calendar"></i> Closes May 30
+            </p>
+            <p class="description">Support IT operations and help manage university systems and infrastructure.</p>
+            <div class="saved-actions">
+              <button class="btn-view">View Details</button>
+              <button class="btn-apply">Apply Now</button>
+            </div>
+          </div>
+
+          <!-- Saved Item -->
+          <div class="saved-item-card">
+            <div class="saved-header">
+              <div class="saved-logo" style="background:#fff0f0;color:#c0290a;">VD</div>
+              <button class="btn-save-remove" title="Remove from saved">
+                <i class="fa fa-heart" style="color:#e53e3e;"></i>
+              </button>
+            </div>
+            <h3>UI/UX Design Intern</h3>
+            <p class="company-name">Vodafone Ghana</p>
+            <p class="job-details">
+              <i class="fa fa-map-marker"></i> Accra · 
+              <i class="fa fa-calendar"></i> Closes Apr 20
+            </p>
+            <p class="description">Design beautiful and intuitive user interfaces for mobile and web applications.</p>
+            <div class="saved-actions">
+              <button class="btn-view">View Details</button>
+              <button class="btn-apply">Apply Now</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="index.js"></script>
+
+</body>
+</html>

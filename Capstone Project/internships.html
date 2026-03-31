@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse Internships | InternConnect</title>
+  <link rel="stylesheet" href="styles1.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="icon" type="image/x-icon" href="images/logo.png">
+  <style>
+    /* ── Page-specific styles ── */
+    .page-header {
+      background: linear-gradient(135deg, #001A40 0%, #0056FF 100%);
+      padding: 60px 0 50px;
+      color: #fff;
+      text-align: center;
+    }
+    .page-header h1 { font-size: 2.4rem; margin-bottom: 10px; }
+    .page-header p  { opacity: 0.85; font-size: 1.05rem; }
+
+    /* ── Search + Filter Bar ── */
+    .filter-bar {
+      background: #fff;
+      border-bottom: 1px solid #eee;
+      padding: 18px 0;
+      position: sticky;
+      top: 75px;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .filter-inner {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .filter-search {
+      display: flex;
+      flex: 1;
+      min-width: 220px;
+      background: #f5f7f9;
+      border: 1px solid #e8eaed;
+      border-radius: 8px;
+      align-items: center;
+      padding: 0 12px;
+    }
+    .filter-search i { color: #999; margin-right: 8px; }
+    .filter-search input {
+      border: none; background: transparent;
+      padding: 11px 0; outline: none; font-size: 0.95rem; width: 100%;
+    }
+    .filter-select {
+      padding: 11px 14px;
+      background: #f5f7f9;
+      border: 1px solid #e8eaed;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      outline: none;
+      color: #333;
+      cursor: pointer;
+    }
+    .filter-select:focus { border-color: #0056FF; }
+    .btn-filter {
+      padding: 11px 20px;
+      background: #0056FF;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .btn-filter:hover { background: #0046d5; }
+
+    /* ── Results Info ── */
+    .results-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 0 16px;
+      color: #666;
+      font-size: 0.9rem;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .results-info strong { color: #111; }
+
+    /* ── Listing Layout ── */
+    .listing-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 30px;
+      padding-bottom: 60px;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 14px;
+      padding: 24px;
+      height: fit-content;
+      position: sticky;
+      top: 145px;
+    }
+    .sidebar h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #111;
+    }
+    .sidebar-section { margin-bottom: 28px; }
+    .sidebar-section h4 {
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #999;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+    .checkbox-group label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: #444;
+    }
+    .checkbox-group input[type="checkbox"] {
+      accent-color: #0056FF;
+      width: 16px; height: 16px;
+    }
+    .tag-count {
+      margin-left: auto;
+      font-size: 0.75rem;
+      background: #f0f4ff;
+      color: #0056FF;
+      padding: 2px 7px;
+      border-radius: 20px;
+    }
+    .btn-clear-filters {
+      width: 100%;
+      padding: 10px;
+      background: transparent;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      color: #666;
+      cursor: pointer;
+      font-size: 0.88rem;
+      margin-top: 4px;
+    }
+    .btn-clear-filters:hover { border-color: #0056FF; color: #0056FF; }
+
+    /* ── Internship Cards ── */
+    .cards-list { display: flex; flex-direction: column; gap: 18px; }
+
+    .intern-card {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 14px;
+      padding: 24px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      transition: box-shadow 0.25s, transform 0.25s;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+    .intern-card:hover {
+      box-shadow: 0 8px 30px rgba(0,86,255,0.1);
+      transform: translateY(-2px);
+      border-color: #d0deff;
+    }
+
+    .company-logo {
+      width: 56px; height: 56px;
+      border-radius: 12px;
+      background: #f0f4ff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+      font-weight: 700;
+      color: #0056FF;
+      border: 1px solid #dde8ff;
+    }
+
+    .card-body { flex: 1; }
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .card-top h3 {
+      font-size: 1.05rem;
+      color: #111;
+      margin-bottom: 2px;
+    }
+    .company-name { font-size: 0.88rem; color: #555; }
+
+    .badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    .badge-paid    { background: #e8fff3; color: #0a8a4a; }
+    .badge-remote  { background: #fff4e6; color: #c0580a; }
+    .badge-onsite  { background: #eef2ff; color: #3a52cc; }
+    .badge-hybrid  { background: #faf0ff; color: #7c3aed; }
+    .badge-new     { background: #fff0f0; color: #c0290a; }
+
+    .card-meta {
+      display: flex;
+      gap: 18px;
+      margin: 12px 0;
+      flex-wrap: wrap;
+    }
+    .card-meta span {
+      font-size: 0.85rem;
+      color: #777;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .card-meta i { color: #aaa; font-size: 0.8rem; }
+
+    .card-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+    .skill-tag {
+      font-size: 0.78rem;
+      padding: 3px 10px;
+      background: #f5f7f9;
+      border-radius: 20px;
+      color: #555;
+      border: 1px solid #e8eaed;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #f5f5f5;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .deadline { font-size: 0.82rem; color: #888; }
+    .deadline strong { color: #e53e3e; }
+
+    .btn-apply {
+      padding: 9px 22px;
+      background: #0056FF;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-apply:hover { background: #0046d5; }
+    .btn-save {
+      padding: 9px 14px;
+      background: #f5f7f9;
+      color: #444;
+      border: 1px solid #e8eaed;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.88rem;
+      transition: all 0.2s;
+    }
+    .btn-save:hover { border-color: #0056FF; color: #0056FF; }
+    .card-actions { display: flex; gap: 8px; }
+
+    /* Pagination */
+    .pagination {
+      display: flex; justify-content: center;
+      gap: 8px; padding: 30px 0 20px;
+    }
+    .page-btn {
+      width: 38px; height: 38px;
+      border: 1px solid #ddd;
+      background: #fff;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+      color: #444;
+    }
+    .page-btn.active { background: #0056FF; color: #fff; border-color: #0056FF; }
+    .page-btn:hover:not(.active) { border-color: #0056FF; color: #0056FF; }
+
+    /* No results */
+    .no-results {
+      text-align: center; padding: 60px 20px; color: #888;
+    }
+    .no-results i { font-size: 3rem; margin-bottom: 15px; color: #ccc; display: block; }
+
+    @media (max-width: 900px) {
+      .listing-layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .filter-inner { gap: 8px; }
+      .filter-select { flex: 1; min-width: 120px; }
+    }
+  </style>
+</head>
+<body>
+  
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container nav-flex">
+      <div class="logo">
+        <img class="ilogo" src="images/logo.png" alt="InternConnect Logo">
+        <span><strong>InternConnect</strong></span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="internships.html" class="active">Internships</a></li>
+        <li><a href="Help.html">Help</a></li>
+      </ul>
+      <div class="nav-auth">
+        <a href="Sign In.html" class="login-text">Login</a>
+        <button class="btn-signup">
+          <a href="Sign Up.html" style="color:white;text-decoration:none;">Sign Up</a>
+        </button>
+      </div>
+      <div class="mobile-toggle"><i class="fa fa-bars"></i></div>
+    </div>
+  </nav>
+  
+
+  <div class="dash-wrapper">
+    <!-- Sidebar -->
+    <!-- Sidebar -->
+    <aside class="dash-sidebar">
+      <div class="dash-profile">
+        <div class="avatar">JO</div>
+        <h3>Joel Ofori Asare</h3>
+        <p>Computer Science · Level 200</p>
+        <div class="profile-completion">
+          <div class="profile-completion-bar"></div>
+        </div>
+        <div class="completion-label">Profile 65% complete</div>
+      </div>
+
+      <nav class="dash-nav">
+        <div class="nav-divider">Main</div>
+        <a href="student-dashboard.html" class="dash-nav-item"><i class="fa fa-home"></i> Overview</a>
+        <a href="internships.html" class="dash-nav-item"><i class="fa fa-search"></i> Browse Internships</a>
+        <a href="applications.html" class="dash-nav-item active"><i class="fa fa-file-alt"></i> My Applications <span class="badge-count">3</span></a>
+        <a href="saved.html" class="dash-nav-item"><i class="fa fa-heart"></i> Saved <span class="badge-count">5</span></a>
+
+        <div class="nav-divider">Account</div>
+        <a href="profile.html" class="dash-nav-item"><i class="fa fa-user"></i> My Profile</a>
+        <a href="notifications.html" class="dash-nav-item"><i class="fa fa-bell"></i> Notifications <span class="badge-count">2</span></a>
+        <a href="settings.html" class="dash-nav-item"><i class="fa fa-cog"></i> Settings</a>
+        <a href="index.html" class="dash-nav-item" style="color:#e53e3e;margin-top:8px;"><i class="fa fa-sign-out-alt"></i> Logout</a>
+      </nav>
+    </aside>
+
+    <main class="dash-main">
+      <!-- Page Header -->
+      <div class="page-header">
+        <h1>Browse Internships</h1>
+        <p>Discover opportunities across Ghana — curated for KNUST students</p>
+      </div>
+
+      <!-- Sticky Filter Bar -->
+  <div class="filter-bar">
+    <div class="container">
+      <div class="filter-inner">
+        <div class="filter-search">
+          <i class="fa fa-search"></i>
+          <input type="text" id="searchInput" placeholder="Search by role, company, or skill…">
+        </div>
+        <select class="filter-select" id="locationFilter">
+          <option value="">All Locations</option>
+          <option>Accra</option>
+          <option>Kumasi</option>
+          <option>Takoradi</option>
+          <option>Remote</option>
+        </select>
+        <select class="filter-select" id="typeFilter">
+          <option value="">All Types</option>
+          <option>Full-time</option>
+          <option>Part-time</option>
+          <option>Remote</option>
+        </select>
+        <select class="filter-select" id="fieldFilter">
+          <option value="">All Fields</option>
+          <option>Technology</option>
+          <option>Finance</option>
+          <option>Engineering</option>
+          <option>Health</option>
+          <option>Marketing</option>
+        </select>
+        <button class="btn-filter" id="applyFilter"><i class="fa fa-sliders-h"></i> Filter</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="results-info">
+      <span>Showing <strong id="resultCount">12</strong> internships</span>
+      <span>Sort by:
+        <select id="sortSelect" style="border:none;outline:none;color:#0056FF;font-weight:600;cursor:pointer;background:transparent;">
+          <option>Most Recent</option>
+          <option>Deadline (Soonest)</option>
+          <option>Alphabetical</option>
+        </select>
+      </span>
+    </div>
+
+    <div class="listing-layout">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <h3><i class="fa fa-filter" style="color:#0056FF;margin-right:8px;"></i>Refine Results</h3>
+
+        <div class="sidebar-section">
+          <h4>Compensation</h4>
+          <div class="checkbox-group">
+            <label><input type="checkbox" class="sidebar-filter" data-key="paid"> Paid <span class="tag-count">8</span></label>
+            <label><input type="checkbox" class="sidebar-filter" data-key="unpaid"> Unpaid <span class="tag-count">4</span></label>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <h4>Work Mode</h4>
+          <div class="checkbox-group">
+            <label><input type="checkbox" class="sidebar-filter" data-key="remote"> Remote <span class="tag-count">5</span></label>
+            <label><input type="checkbox" class="sidebar-filter" data-key="onsite"> On-site <span class="tag-count">6</span></label>
+            <label><input type="checkbox" class="sidebar-filter" data-key="hybrid"> Hybrid <span class="tag-count">3</span></label>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <h4>Duration</h4>
+          <div class="checkbox-group">
+            <label><input type="checkbox" class="sidebar-filter" data-key="1month"> 1 Month</label>
+            <label><input type="checkbox" class="sidebar-filter" data-key="3months"> 3 Months</label>
+            <label><input type="checkbox" class="sidebar-filter" data-key="6months"> 6 Months</label>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <h4>Field</h4>
+          <div class="checkbox-group">
+            <label><input type="checkbox" class="sidebar-filter" data-key="tech"> Technology <span class="tag-count">5</span></label>
+            <label><input type="checkbox" class="sidebar-filter" data-key="finance"> Finance <span class="tag-count">3</span></label>
+            <label><input type="checkbox" class="sidebar-filter" data-key="engineering"> Engineering <span class="tag-count">2</span></label>
+            <label><input type="checkbox" class="sidebar-filter" data-key="health"> Health <span class="tag-count">2</span></label>
+          </div>
+        </div>
+
+        <button class="btn-clear-filters" id="clearFilters">Clear all filters</button>
+      </aside>
+
+      <!-- Cards -->
+      <div>
+        <div class="cards-list" id="cardsList">
+
+          <!-- Card 1 -->
+          <a class="intern-card" href="#">
+            <div class="company-logo">GH</div>
+            <div class="card-body">
+              <div class="card-top">
+                <div>
+                  <h3>Software Engineering Intern</h3>
+                  <div class="company-name">Ghana Tech Lab · Accra</div>
+                </div>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                  <span class="badge badge-paid">Paid</span>
+                  <span class="badge badge-new">New</span>
+                </div>
+              </div>
+              <div class="card-meta">
+                <span><i class="fa fa-map-marker-alt"></i> Accra, Ghana</span>
+                <span><i class="fa fa-clock"></i> 3 Months</span>
+                <span><i class="fa fa-laptop-code"></i> On-site</span>
+              </div>
+              <div class="card-tags">
+                <span class="skill-tag">React</span>
+                <span class="skill-tag">Node.js</span>
+                <span class="skill-tag">JavaScript</span>
+              </div>
+              <div class="card-footer">
+                <div class="deadline">Deadline: <strong>April 15, 2025</strong></div>
+                <div class="card-actions">
+                  <button class="btn-save" onclick="event.preventDefault();this.innerHTML='<i class=\'fa fa-heart\'></i> Saved';this.style.color='#e53e3e';"><i class="fa fa-heart"></i> Save</button>
+                  <button class="btn-apply" onclick="event.preventDefault();window.location.href='Sign In.html'">Apply Now</button>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <!-- Card 2 -->
+          <a class="intern-card" href="#">
+            <div class="company-logo">EC</div>
+            <div class="card-body">
+              <div class="card-top">
+                <div>
+                  <h3>Data Analysis Intern</h3>
+                  <div class="company-name">Ecobank Ghana · Accra</div>
+                </div>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                  <span class="badge badge-paid">Paid</span>
+                  <span class="badge badge-onsite">On-site</span>
+                </div>
+              </div>
+              <div class="card-meta">
+                <span><i class="fa fa-map-marker-alt"></i> Accra, Ghana</span>
+                <span><i class="fa fa-clock"></i> 6 Months</span>
+                <span><i class="fa fa-university"></i> Finance</span>
+              </div>
+              <div class="card-tags">
+                <span class="skill-tag">Python</span>
+                <span class="skill-tag">Excel</span>
+                <span class="skill-tag">Power BI</span>
+              </div>
+              <div class="card-footer">
+                <div class="deadline">Deadline: <strong>April 30, 2025</strong></div>
+                <div class="card-actions">
+                  <button class="btn-save" onclick="event.preventDefault();this.innerHTML='<i class=\'fa fa-heart\'></i> Saved';this.style.color='#e53e3e';"><i class="fa fa-heart"></i> Save</button>
+                  <button class="btn-apply" onclick="event.preventDefault();window.location.href='Sign In.html'">Apply Now</button>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <!-- Card 3 -->
+          <a class="intern-card" href="#">
+            <div class="company-logo" style="background:#fff8ed;color:#c05800;">VD</div>
+            <div class="card-body">
+              <div class="card-top">
+                <div>
+                  <h3>UI/UX Design Intern</h3>
+                  <div class="company-name">Vodafone Ghana · Accra</div>
+                </div>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                  <span class="badge badge-paid">Paid</span>
+                  <span class="badge badge-hybrid">Hybrid</span>
+                </div>
+              </div>
+              <div class="card-meta">
+                <span><i class="fa fa-map-marker-alt"></i> Accra, Ghana</span>
+                <span><i class="fa fa-clock"></i> 3 Months</span>
+                <span><i class="fa fa-palette"></i> Design</span>
+              </div>
+              <div class="card-tags">
+                <span class="skill-tag">Figma</span>
+                <span class="skill-tag">Adobe XD</span>
+                <span class="skill-tag">Prototyping</span>
+              </div>
+              <div class="card-footer">
+                <div class="deadline">Deadline: <strong>May 5, 2025</strong></div>
+                <div class="card-actions">
+                  <button class="btn-save" onclick="event.preventDefault();this.innerHTML='<i class=\'fa fa-heart\'></i> Saved';this.style.color='#e53e3e';"><i class="fa fa-heart"></i> Save</button>
+                  <button class="btn-apply" onclick="event.preventDefault();window.location.href='Sign In.html'">Apply Now</button>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <!-- Card 4 -->
+          <a class="intern-card" href="#">
+            <div class="company-logo" style="background:#f0fff4;color:#0a8a4a;">KN</div>
+            <div class="card-body">
+              <div class="card-top">
+                <div>
+                  <h3>Civil Engineering Intern</h3>
+                  <div class="company-name">KNUST Works & Housing · Kumasi</div>
+                </div>
+                <div>
+                  <span class="badge badge-onsite">On-site</span>
+                </div>
+              </div>
+              <div class="card-meta">
+                <span><i class="fa fa-map-marker-alt"></i> Kumasi, Ghana</span>
+                <span><i class="fa fa-clock"></i> 3 Months</span>
+                <span><i class="fa fa-hard-hat"></i> Engineering</span>
+              </div>
+              <div class="card-tags">
+                <span class="skill-tag">AutoCAD</span>
+                <span class="skill-tag">Site Management</span>
+                <span class="skill-tag">Surveying</span>
+              </div>
+              <div class="card-footer">
+                <div class="deadline">Deadline: <strong>May 20, 2025</strong></div>
+                <div class="card-actions">
+                  <button class="btn-save" onclick="event.preventDefault();this.innerHTML='<i class=\'fa fa-heart\'></i> Saved';this.style.color='#e53e3e';"><i class="fa fa-heart"></i> Save</button>
+                  <button class="btn-apply" onclick="event.preventDefault();window.location.href='Sign In.html'">Apply Now</button>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <!-- Card 5 -->
+          <a class="intern-card" href="#">
+            <div class="company-logo" style="background:#faf0ff;color:#7c3aed;">MT</div>
+            <div class="card-body">
+              <div class="card-top">
+                <div>
+                  <h3>Digital Marketing Intern</h3>
+                  <div class="company-name">MTN Ghana · Accra</div>
+                </div>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                  <span class="badge badge-paid">Paid</span>
+                  <span class="badge badge-remote">Remote</span>
+                  <span class="badge badge-new">New</span>
+                </div>
+              </div>
+              <div class="card-meta">
+                <span><i class="fa fa-map-marker-alt"></i> Remote</span>
+                <span><i class="fa fa-clock"></i> 1 Month</span>
+                <span><i class="fa fa-bullhorn"></i> Marketing</span>
+              </div>
+              <div class="card-tags">
+                <span class="skill-tag">SEO</span>
+                <span class="skill-tag">Social Media</span>
+                <span class="skill-tag">Content Writing</span>
+              </div>
+              <div class="card-footer">
+                <div class="deadline">Deadline: <strong>April 10, 2025</strong></div>
+                <div class="card-actions">
+                  <button class="btn-save" onclick="event.preventDefault();this.innerHTML='<i class=\'fa fa-heart\'></i> Saved';this.style.color='#e53e3e';"><i class="fa fa-heart"></i> Save</button>
+                  <button class="btn-apply" onclick="event.preventDefault();window.location.href='Sign In.html'">Apply Now</button>
+                </div>
+              </div>
+            </div>
+          </a>
+
+          <!-- Card 6 -->
+          <a class="intern-card" href="#">
+            <div class="company-logo" style="background:#fff0f0;color:#c0290a;">GH</div>
+            <div class="card-body">
+              <div class="card-top">
+                <div>
+                  <h3>Public Health Intern</h3>
+                  <div class="company-name">Ghana Health Service · Kumasi</div>
+                </div>
+                <div>
+                  <span class="badge badge-onsite">On-site</span>
+                </div>
+              </div>
+              <div class="card-meta">
+                <span><i class="fa fa-map-marker-alt"></i> Kumasi, Ghana</span>
+                <span><i class="fa fa-clock"></i> 6 Months</span>
+                <span><i class="fa fa-heartbeat"></i> Health</span>
+              </div>
+              <div class="card-tags">
+                <span class="skill-tag">Epidemiology</span>
+                <span class="skill-tag">Data Collection</span>
+                <span class="skill-tag">Community Health</span>
+              </div>
+              <div class="card-footer">
+                <div class="deadline">Deadline: <strong>June 1, 2025</strong></div>
+                <div class="card-actions">
+                  <button class="btn-save" onclick="event.preventDefault();this.innerHTML='<i class=\'fa fa-heart\'></i> Saved';this.style.color='#e53e3e';"><i class="fa fa-heart"></i> Save</button>
+                  <button class="btn-apply" onclick="event.preventDefault();window.location.href='Sign In.html'">Apply Now</button>
+                </div>
+              </div>
+            </div>
+          </a>
+
+        </div><!-- /cards-list -->
+
+        <!-- Pagination -->
+        <div class="pagination">
+          <button class="page-btn active">1</button>
+          <button class="page-btn">2</button>
+          <button class="page-btn">3</button>
+          <button class="page-btn"><i class="fa fa-chevron-right"></i></button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <h3><img class="ilogo" src="images/logo.png" alt="InternConnect Logo"> InternConnect</h3>
+        <p>Connecting KNUST students with quality internship opportunities across Ghana.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="internships.html">Browse Internships</a></li>
+          <li><a href="Sign Up.html">For Students</a></li>
+          <li><a href="Sign Up.html">For Organizations</a></li>
+        </ul>
+      </div>
+      <div class="footer-contact">
+        <h4>Contact</h4>
+        <p>Kwame Nkrumah University of Science and Technology</p>
+        <p>Kumasi, Ghana</p>
+        <p>Email: <strong>internships@knust.edu.gh</strong></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="index.js"></script>
+  <script>
+    // Search filter
+    const searchInput = document.getElementById('searchInput');
+    const cards = document.querySelectorAll('.intern-card');
+
+    function filterCards() {
+      const q = searchInput.value.toLowerCase();
+      let count = 0;
+      cards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        const show = text.includes(q);
+        card.style.display = show ? 'flex' : 'none';
+        if (show) count++;
+      });
+      document.getElementById('resultCount').textContent = count;
+    }
+
+    searchInput.addEventListener('input', filterCards);
+
+    // Pre-fill search from URL param
+    const params = new URLSearchParams(location.search);
+    if (params.get('search')) {
+      searchInput.value = params.get('search');
+      filterCards();
+    }
+
+    // Pagination buttons
+    document.querySelectorAll('.page-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.page-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+
+    // Clear filters
+    document.getElementById('clearFilters').addEventListener('click', () => {
+      document.querySelectorAll('.sidebar-filter').forEach(cb => cb.checked = false);
+      document.getElementById('searchInput').value = '';
+      document.getElementById('locationFilter').value = '';
+      document.getElementById('typeFilter').value = '';
+      document.getElementById('fieldFilter').value = '';
+      filterCards();
+    });
+  </script>
+</body>
+</html>

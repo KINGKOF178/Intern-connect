@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard | InternConnect</title>
+  <link rel="stylesheet" href="styles1.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="icon" type="image/x-icon" href="images/logo.png">
+
+
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container nav-flex">
+      <div class="logo">
+        <img class="ilogo" src="images/logo.png" alt="InternConnect Logo">
+        <span><strong>InternConnect</strong></span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="internships.html">Internships</a></li>
+        <li><a href="Help.html">Help</a></li>
+      </ul>
+      <div class="nav-auth" style="gap:12px;">
+        <span style="font-size:0.9rem;color:#555;">Hi, <strong>Joel</strong></span>
+        <a href="index.html" class="login-text" style="color:#e53e3e;">Logout</a>
+      </div>
+      <div class="mobile-toggle"><i class="fa fa-bars"></i></div>
+    </div>
+  </nav>
+
+  <div class="dash-wrapper">
+
+    <!-- Sidebar -->
+    <aside class="dash-sidebar">
+      <div class="dash-profile">
+        <div class="avatar">JO</div>
+        <h3>Joel Ofori Asare</h3>
+        <p>Computer Science · Level 200</p>
+        <div class="profile-completion">
+          <div class="profile-completion-bar"></div>
+        </div>
+        <div class="completion-label">Profile 65% complete</div>
+      </div>
+
+      <nav class="dash-nav">
+        <div class="nav-divider">Main</div>
+        <a href="student-dashboard.html" class="dash-nav-item active"><i class="fa fa-home"></i> Overview</a>
+        <a href="internships.html" class="dash-nav-item"><i class="fa fa-search"></i> Browse Internships</a>
+        <a href="applications.html" class="dash-nav-item"><i class="fa fa-file-alt"></i> My Applications <span class="badge-count">3</span></a>
+        <a href="saved.html" class="dash-nav-item"><i class="fa fa-heart"></i> Saved <span class="badge-count">5</span></a>
+
+        <div class="nav-divider">Account</div>
+        <a href="profile.html" class="dash-nav-item"><i class="fa fa-user"></i> My Profile</a>
+        <a href="notifications.html" class="dash-nav-item"><i class="fa fa-bell"></i> Notifications <span class="badge-count">2</span></a>
+        <a href="settings.html" class="dash-nav-item"><i class="fa fa-cog"></i> Settings</a>
+        <a href="index.html" class="dash-nav-item" style="color:#e53e3e;margin-top:8px;"><i class="fa fa-sign-out-alt"></i> Logout</a>
+      </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="dash-main">
+
+      <!-- Top Bar -->
+      <div class="dash-topbar">
+        <div>
+          <h1>Good morning, Joel 👋</h1>
+          <p>Here's your internship activity overview</p>
+        </div>
+        <button class="btn-browse" onclick="window.location.href='internships.html'">
+          <i class="fa fa-search"></i> Browse Internships
+        </button>
+      </div>
+
+      <!-- Alert -->
+      <div class="alert-banner">
+        <i class="fa fa-info-circle"></i>
+        <div>
+          <h4>Complete your profile to get better matches</h4>
+          <p>Add your CV, skills, and academic information to improve your recommendations.</p>
+        </div>
+        <button class="btn-complete">Complete Profile</button>
+      </div>
+
+      <!-- Stats -->
+      <div class="stat-row">
+        <div class="stat-card">
+          <div class="sc-icon sc-blue"><i class="fa fa-paper-plane"></i></div>
+          <h3>3</h3>
+          <p>Applications Sent</p>
+        </div>
+        <div class="stat-card">
+          <div class="sc-icon sc-green"><i class="fa fa-check-circle"></i></div>
+          <h3>1</h3>
+          <p>Accepted</p>
+        </div>
+        <div class="stat-card">
+          <div class="sc-icon sc-orange"><i class="fa fa-clock"></i></div>
+          <h3>2</h3>
+          <p>Under Review</p>
+        </div>
+        <div class="stat-card">
+          <div class="sc-icon sc-purple"><i class="fa fa-heart"></i></div>
+          <h3>5</h3>
+          <p>Saved</p>
+        </div>
+      </div>
+
+      <!-- Applications Table -->
+      <div class="section-head">
+        <h2>My Applications</h2>
+        <a href="#">View all</a>
+      </div>
+      <div class="applications-card">
+        <table class="app-table">
+          <thead>
+            <tr>
+              <th>Role / Company</th>
+              <th>Applied</th>
+              <th>Deadline</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="app-company">
+                  <div class="app-logo">GH</div>
+                  <div>
+                    <div class="app-role">Software Engineering Intern</div>
+                    <div class="app-org">Ghana Tech Lab</div>
+                  </div>
+                </div>
+              </td>
+              <td style="color:#666;">Mar 10, 2025</td>
+              <td style="color:#e53e3e;font-weight:600;">Apr 15, 2025</td>
+              <td><span class="status-badge status-reviewed">Under Review</span></td>
+              <td><button class="btn-withdraw">Withdraw</button></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="app-company">
+                  <div class="app-logo" style="background:#e8fff3;color:#0a8a4a;">EC</div>
+                  <div>
+                    <div class="app-role">Data Analysis Intern</div>
+                    <div class="app-org">Ecobank Ghana</div>
+                  </div>
+                </div>
+              </td>
+              <td style="color:#666;">Mar 5, 2025</td>
+              <td style="color:#888;">Apr 30, 2025</td>
+              <td><span class="status-badge status-accepted">Accepted</span></td>
+              <td><button class="btn-withdraw">Withdraw</button></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="app-company">
+                  <div class="app-logo" style="background:#fff4e6;color:#c05800;">MT</div>
+                  <div>
+                    <div class="app-role">Digital Marketing Intern</div>
+                    <div class="app-org">MTN Ghana</div>
+                  </div>
+                </div>
+              </td>
+              <td style="color:#666;">Feb 28, 2025</td>
+              <td style="color:#e53e3e;font-weight:600;">Apr 10, 2025</td>
+              <td><span class="status-badge status-pending">Pending</span></td>
+              <td><button class="btn-withdraw">Withdraw</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Recommended + Saved -->
+      <div class="two-col">
+
+        <!-- Recommended -->
+        <div class="mini-card-list">
+          <div class="mini-card-head">
+            Recommended for You
+            <a href="internships.html">See all</a>
+          </div>
+          <div class="mini-intern-item">
+            <div class="mini-logo">VD</div>
+            <div>
+              <div class="mini-role">UI/UX Design Intern</div>
+              <div class="mini-org">Vodafone Ghana</div>
+            </div>
+            <span class="mini-match">92% match</span>
+          </div>
+          <div class="mini-intern-item">
+            <div class="mini-logo" style="background:#faf0ff;color:#7c3aed;">KN</div>
+            <div>
+              <div class="mini-role">IT Support Intern</div>
+              <div class="mini-org">KNUST ICT Directorate</div>
+            </div>
+            <span class="mini-match">87% match</span>
+          </div>
+          <div class="mini-intern-item">
+            <div class="mini-logo" style="background:#fff0f0;color:#c0290a;">GH</div>
+            <div>
+              <div class="mini-role">Cybersecurity Intern</div>
+              <div class="mini-org">Ghana Cyber Security Authority</div>
+            </div>
+            <span class="mini-match">81% match</span>
+          </div>
+        </div>
+
+        <!-- Saved -->
+        <div class="mini-card-list">
+          <div class="mini-card-head">
+            Saved Internships
+            <a href="#">See all</a>
+          </div>
+          <div class="mini-intern-item">
+            <div class="mini-logo" style="background:#f0fff4;color:#0a8a4a;">SG</div>
+            <div>
+              <div class="mini-role">Backend Developer Intern</div>
+              <div class="mini-org">Stanbic Ghana</div>
+            </div>
+            <span style="font-size:0.75rem;color:#e53e3e;margin-left:auto;white-space:nowrap;">Closes Apr 20</span>
+          </div>
+          <div class="mini-intern-item">
+            <div class="mini-logo" style="background:#fff8e6;color:#b07800;">AP</div>
+            <div>
+              <div class="mini-role">App Developer Intern</div>
+              <div class="mini-org">Appzone Group</div>
+            </div>
+            <span style="font-size:0.75rem;color:#888;margin-left:auto;white-space:nowrap;">May 15</span>
+          </div>
+          <div class="mini-intern-item">
+            <div class="mini-logo" style="background:#eef3ff;color:#0056FF;">AM</div>
+            <div>
+              <div class="mini-role">ML Research Intern</div>
+              <div class="mini-org">Amalitech Ghana</div>
+            </div>
+            <span style="font-size:0.75rem;color:#888;margin-left:auto;white-space:nowrap;">Jun 1</span>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script src="index.js"></script>
+</body>
+</html>

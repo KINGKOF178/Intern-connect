@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notifications | InternConnect</title>
+  <link rel="stylesheet" href="styles1.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="icon" type="image/x-icon" href="images/logo.png">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container nav-flex">
+      <div class="logo">
+        <img class="ilogo" src="images/logo.png" alt="InternConnect Logo">
+        <span><strong>InternConnect</strong></span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="internships.html">Internships</a></li>
+        <li><a href="Help.html">Help</a></li>
+      </ul>
+      <div class="nav-auth" style="gap:12px;">
+        <span style="font-size:0.9rem;color:#555;">Hi, <strong>Joel</strong></span>
+        <a href="index.html" class="login-text" style="color:#e53e3e;">Logout</a>
+      </div>
+      <div class="mobile-toggle"><i class="fa fa-bars"></i></div>
+    </div>
+  </nav>
+
+  <div class="dash-wrapper">
+
+    <!-- Sidebar -->
+    <aside class="dash-sidebar">
+      <div class="dash-profile">
+        <div class="avatar">JO</div>
+        <h3>Joel Ofori Asare</h3>
+        <p>Computer Science · Level 200</p>
+        <div class="profile-completion">
+          <div class="profile-completion-bar"></div>
+        </div>
+        <div class="completion-label">Profile 65% complete</div>
+      </div>
+
+      <nav class="dash-nav">
+        <div class="nav-divider">Main</div>
+        <a href="student-dashboard.html" class="dash-nav-item"><i class="fa fa-home"></i> Overview</a>
+        <a href="internships.html" class="dash-nav-item"><i class="fa fa-search"></i> Browse Internships</a>
+        <a href="applications.html" class="dash-nav-item"><i class="fa fa-file-alt"></i> My Applications <span class="badge-count">3</span></a>
+        <a href="saved.html" class="dash-nav-item"><i class="fa fa-heart"></i> Saved <span class="badge-count">5</span></a>
+
+        <div class="nav-divider">Account</div>
+        <a href="profile.html" class="dash-nav-item"><i class="fa fa-user"></i> My Profile</a>
+        <a href="notifications.html" class="dash-nav-item active"><i class="fa fa-bell"></i> Notifications <span class="badge-count">2</span></a>
+        <a href="settings.html" class="dash-nav-item"><i class="fa fa-cog"></i> Settings</a>
+        <a href="index.html" class="dash-nav-item" style="color:#e53e3e;margin-top:8px;"><i class="fa fa-sign-out-alt"></i> Logout</a>
+      </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="dash-main">
+
+      <!-- Top Bar -->
+      <div class="dash-topbar">
+        <div>
+          <h1>Notifications 🔔</h1>
+          <p>Stay updated on your applications and opportunities</p>
+        </div>
+      </div>
+
+      <!-- Notifications List -->
+      <div class="applications-card">
+        <div class="notifications-list">
+          
+          <!-- Notification Item -->
+          <div class="notification-item unread">
+            <div class="notif-icon notif-accepted">
+              <i class="fa fa-check-circle"></i>
+            </div>
+            <div class="notif-content">
+              <h4>Application Accepted</h4>
+              <p>Congratulations! Your application for <strong>Data Analysis Intern</strong> at <strong>Ecobank Ghana</strong> has been accepted.</p>
+              <span class="notif-time">2 hours ago</span>
+            </div>
+          </div>
+
+          <!-- Notification Item -->
+          <div class="notification-item unread">
+            <div class="notif-icon notif-review">
+              <i class="fa fa-hourglass-half"></i>
+            </div>
+            <div class="notif-content">
+              <h4>Application Under Review</h4>
+              <p>Your application for <strong>Software Engineering Intern</strong> at <strong>Ghana Tech Lab</strong> is now under review.</p>
+              <span class="notif-time">1 day ago</span>
+            </div>
+          </div>
+
+          <!-- Notification Item -->
+          <div class="notification-item">
+            <div class="notif-icon notif-deadline">
+              <i class="fa fa-calendar-alt"></i>
+            </div>
+            <div class="notif-content">
+              <h4>Application Deadline Approaching</h4>
+              <p>The deadline for <strong>UI/UX Design Intern</strong> at <strong>Vodafone Ghana</strong> is approaching on <strong>Apr 20, 2025</strong>.</p>
+              <span class="notif-time">3 days ago</span>
+            </div>
+          </div>
+
+          <!-- Notification Item -->
+          <div class="notification-item">
+            <div class="notif-icon notif-new">
+              <i class="fa fa-star"></i>
+            </div>
+            <div class="notif-content">
+              <h4>New Opportunity Matching Your Profile</h4>
+              <p>A new <strong>Backend Developer Intern</strong> position at <strong>Stanbic Ghana</strong> matches your profile (92% match).</p>
+              <span class="notif-time">5 days ago</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="index.js"></script>
+</body>
+</html>

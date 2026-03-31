@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | InternConnect</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-flex">
+            <div class="logo">
+                <img class="ilogo" src="images/logo.png" alt="InternConnect Logo">
+                <span><strong>InternConnect</strong></span>
+            </div>
+
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="Help.html">Help</a></li>
+            </ul>
+
+            <div class="nav-auth">
+                <a href="Sign In.html" class="login-text">Login</a>
+                <button class="btn-signup">
+                    <a href="Sign Up.html" style="color: white; text-decoration: none;">Sign Up</a>
+                </button>
+            </div>
+
+            <div class="mobile-toggle">
+                <i class="fa fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <div class="auth-container">
+        <div class="auth-header">
+            <h1>Create Your Account</h1>
+            <p>Join the KNUST internship community today</p>
+        </div>
+
+        <div class="type-toggle">
+            <input type="radio" name="user-type" id="student" checked>
+            <label for="student"><i class="fa fa-user"></i> Student</label>
+
+            <input type="radio" name="user-type" id="organization">
+            <label for="organization"><i class="fa fa-building"></i> Organization</label>
+
+            <div class="toggle-slider"></div>
+        </div>
+
+        <div class="auth-card">
+            <form id="signupForm">
+
+                <!-- Student Form -->
+                <div id="studentForm" class="form-section active">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" placeholder="Enter your full name" class="student-field">
+                    </div>
+                    <div class="form-group">
+                        <label>Student Code</label>
+                        <input type="text" placeholder="e.g., 20210001" class="student-field">
+                    </div>
+                    <div class="form-group">
+                        <label>Student Email</label>
+                        <input type="email" placeholder="example@st.knust.edu.gh" class="student-field">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" placeholder="Enter your phone number" class="student-field">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" placeholder="Min. 8 characters" class="student-field">
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" placeholder="Repeat your password" class="student-field">
+                    </div>
+                </div>
+
+                <!-- Organization Form -->
+                <div id="organizationForm" class="form-section hidden">
+                    <div class="form-group">
+                        <label>Organization Name</label>
+                        <input type="text" placeholder="Enter organization name" class="org-field">
+                    </div>
+                    <div class="form-group">
+                        <label>Location</label>
+                        <input type="text" placeholder="City, Region" class="org-field">
+                    </div>
+                    <div class="form-group">
+                        <label>Organization Email</label>
+                        <input type="email" placeholder="contact@organization.com" class="org-field">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" placeholder="Enter contact number" class="org-field">
+                    </div>
+                    <div class="form-group">
+                        <label>Website</label>
+                        <input type="url" placeholder="https://www.organization.com" class="org-field">
+                    </div>
+                    <div class="form-group">
+                        <label>Organization Description</label>
+                        <textarea placeholder="Brief description of your organization" class="org-field" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" placeholder="Min. 8 characters" class="org-field">
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" placeholder="Repeat your password" class="org-field">
+                    </div>
+                </div>
+
+                <div class="terms-check">
+                    <input type="checkbox" id="terms">
+                    <label for="terms">I agree to the <a href="#">Terms &amp; Conditions</a></label>
+                </div>
+
+                <button type="submit" class="btn-auth-submit">Create Account</button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Already have an account? <a href="Sign In.html">Sign In</a></p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <h3><img class="ilogo" src="images/logo.png" alt="InternConnect Logo"> InternConnect</h3>
+                <p>Connecting KNUST students with quality internship opportunities across Ghana.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#">Browse Internships</a></li>
+                    <li><a href="#">For Students</a></li>
+                    <li><a href="#">For Organizations</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h4>Contact</h4>
+                <p>Kwame Nkrumah University of Science and Technology</p>
+                <p>Kumasi, Ghana</p>
+                <p>Email: <strong>internships@knust.edu.gh</strong></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- FIX: Form switcher inline script — complete and closed properly -->
+    <script>
+        const studentRadio = document.getElementById('student');
+        const organizationRadio = document.getElementById('organization');
+        const studentFormEl = document.getElementById('studentForm');
+        const organizationFormEl = document.getElementById('organizationForm');
+
+        studentRadio.addEventListener('change', function () {
+            if (this.checked) {
+                studentFormEl.classList.remove('hidden');
+                studentFormEl.classList.add('active');
+                organizationFormEl.classList.remove('active');
+                organizationFormEl.classList.add('hidden');
+            }
+        });
+
+        organizationRadio.addEventListener('change', function () {
+            if (this.checked) {
+                organizationFormEl.classList.remove('hidden');
+                organizationFormEl.classList.add('active');
+                studentFormEl.classList.remove('active');
+                studentFormEl.classList.add('hidden');
+            }
+        });
+    </script>
+
+    <!-- FIX: index.js placed correctly inside </body>, not after </html> -->
+    <script src="index.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings | InternConnect</title>
+  <link rel="stylesheet" href="styles1.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="icon" type="image/x-icon" href="images/logo.png">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container nav-flex">
+      <div class="logo">
+        <img class="ilogo" src="images/logo.png" alt="InternConnect Logo">
+        <span><strong>InternConnect</strong></span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="internships.html">Internships</a></li>
+        <li><a href="Help.html">Help</a></li>
+      </ul>
+      <div class="nav-auth" style="gap:12px;">
+        <span style="font-size:0.9rem;color:#555;">Hi, <strong>Joel</strong></span>
+        <a href="index.html" class="login-text" style="color:#e53e3e;">Logout</a>
+      </div>
+      <div class="mobile-toggle"><i class="fa fa-bars"></i></div>
+    </div>
+  </nav>
+
+  <div class="dash-wrapper">
+
+    <!-- Sidebar -->
+    <aside class="dash-sidebar">
+      <div class="dash-profile">
+        <div class="avatar">JO</div>
+        <h3>Joel Ofori Asare</h3>
+        <p>Computer Science · Level 200</p>
+        <div class="profile-completion">
+          <div class="profile-completion-bar"></div>
+        </div>
+        <div class="completion-label">Profile 65% complete</div>
+      </div>
+
+      <nav class="dash-nav">
+        <div class="nav-divider">Main</div>
+        <a href="student-dashboard.html" class="dash-nav-item"><i class="fa fa-home"></i> Overview</a>
+        <a href="internships.html" class="dash-nav-item"><i class="fa fa-search"></i> Browse Internships</a>
+        <a href="applications.html" class="dash-nav-item"><i class="fa fa-file-alt"></i> My Applications <span class="badge-count">3</span></a>
+        <a href="saved.html" class="dash-nav-item"><i class="fa fa-heart"></i> Saved <span class="badge-count">5</span></a>
+
+        <div class="nav-divider">Account</div>
+        <a href="profile.html" class="dash-nav-item"><i class="fa fa-user"></i> My Profile</a>
+        <a href="notifications.html" class="dash-nav-item"><i class="fa fa-bell"></i> Notifications <span class="badge-count">2</span></a>
+        <a href="settings.html" class="dash-nav-item active"><i class="fa fa-cog"></i> Settings</a>
+        <a href="index.html" class="dash-nav-item" style="color:#e53e3e;margin-top:8px;"><i class="fa fa-sign-out-alt"></i> Logout</a>
+      </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="dash-main">
+
+      <!-- Top Bar -->
+      <div class="dash-topbar">
+        <div>
+          <h1>Settings ⚙️</h1>
+          <p>Manage your account and preferences</p>
+        </div>
+      </div>
+
+      <!-- Settings Sections -->
+      <div style="padding: 10px;" class="applications-card">
+
+        <!-- Notification Settings -->
+        <div class="settings-section">
+          <h2><i class="fa fa-bell"></i> Notification Settings</h2>
+          <div class="settings-item">
+            <div class="settings-info">
+              <h4>Email Notifications</h4>
+              <p>Receive updates about applications and new opportunities</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="settings-item">
+            <div class="settings-info">
+              <h4>Application Updates</h4>
+              <p>Get notified when your applications change status</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="settings-item">
+            <div class="settings-info">
+              <h4>New Opportunities</h4>
+              <p>Receive alerts about new internships matching your profile</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Privacy Settings -->
+        <div class="settings-section">
+          <h2><i class="fa fa-lock"></i> Privacy & Security</h2>
+          <div class="settings-item">
+            <div class="settings-info">
+              <h4>Profile Visibility</h4>
+              <p>Choose who can see your profile</p>
+            </div>
+            <select class="settings-select">
+              <option>Everyone</option>
+              <option selected>Companies Only</option>
+              <option>Private</option>
+            </select>
+          </div>
+          <div class="settings-item">
+            <div class="settings-info">
+              <h4>Change Password</h4>
+              <p>Update your account password</p>
+            </div>
+            <button class="btn-secondary">Change Password</button>
+          </div>
+          <div class="settings-item">
+            <div class="settings-info">
+              <h4>Two-Factor Authentication</h4>
+              <p>Add an extra layer of security to your account</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Account Settings -->
+        <div class="settings-section">
+          <h2><i class="fa fa-user-circle"></i> Account</h2>
+          <div class="settings-item">
+            <div class="settings-info">
+              <h4>Download My Data</h4>
+              <p>Get a copy of your profile data and applications</p>
+            </div>
+            <button class="btn-secondary">Download</button>
+          </div>
+          <div class="settings-item">
+            <div class="settings-info">
+              <h4>Delete Account</h4>
+              <p>Permanently delete your account and all associated data</p>
+            </div>
+            <button class="btn-danger">Delete Account</button>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script src="index.js"></script>
+</body>
+</html>
+<!--<style>
+        /* --- CSS STYLING --- */
+        :root {
+            --primary-blue: #007bff;
+            --bg-light: #f4f7f9;
+            --card-white: #ffffff;
+            --text-main: #2d3436;
+            --text-muted: #636e72;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #d1d9e6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            margin: 0;
+        }
+
+        /* Input Form Styling */
+        .admin-panel {
+            background: var(--card-white);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 375px;
+        }
+
+        .admin-panel input {
+            width: 90%;
+            padding: 10px;
+            margin: 5px 0 15px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .admin-panel button {
+            width: 100%;
+            padding: 10px;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Mobile UI Styling */
+        .iphone-container {
+            width: 375px;
+            background: var(--bg-light);
+            border-radius: 40px;
+            padding: 25px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .header h2 { font-size: 18px; color: var(--text-main); margin: 0; }
+
+        .close-btn {
+            position: absolute;
+            right: 25px;
+            background: #e2e8f0;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .profile-area {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .avatar-circle {
+            width: 90px;
+            height: 90px;
+            background: var(--primary-blue);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            margin: 0 auto 15px;
+            box-shadow: 0 5px 15px rgba(0,123,255,0.3);
+        }
+
+        .name-display { font-size: 22px; margin: 0; color: var(--text-main); font-weight: 700; }
+        .handle-display { color: var(--text-muted); font-size: 14px; margin-top: 5px; }
+
+        .edit-profile-btn {
+            margin-top: 15px;
+            padding: 8px 20px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            background: white;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .section-title {
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 14px;
+            margin: 0 0 10px 10px;
+        }
+
+        .settings-card {
+            background: var(--card-white);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .row {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid #f1f3f5;
+            transition: background 0.2s;
+        }
+
+        .row:last-child { border-bottom: none; }
+
+        .row i {
+            width: 25px;
+            color: var(--primary-blue);
+            font-size: 18px;
+            margin-right: 15px;
+        }
+
+        .row-content {
+            flex: 1;
+            display: flex;
+            justify-content: space-between;
+            font-size: 15px;
+            color: var(--text-main);
+        }
+
+        .secondary-text { color: #95a5a6; font-size: 14px; }
+        .blue-text { color: var(--primary-blue); font-weight: 600; }
+        .chevron { color: #d1d8e0; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+    <div class="admin-panel">
+        <label>Full Name:</label>
+        <input type="text" id="inputName" placeholder="e.g. Jane Smith">
+        <label>Email Address:</label>
+        <input type="email" id="inputEmail" placeholder="e.g. jane@example.com">
+        <button onclick="updateIdentity()">Update Interface</button>
+    </div>
+
+    <div class="iphone-container">
+        <div class="header">
+            <h2>Settings</h2>
+            <div class="close-btn"><i class="fa-solid fa-xmark"></i></div>
+        </div>
+
+        <div class="profile-area">
+            <div id="uiInitials" class="avatar-circle">JD</div>
+            <h1 id="uiFullName" class="name-display">JOHN DOE</h1>
+            <p id="uiHandle" class="handle-display">johndoe123</p>
+            <button class="edit-profile-btn">Edit profile</button>
+        </div>
+
+        <p class="section-title">Account</p>
+        <div class="settings-card">
+            <div class="row">
+                <i class="fa-regular fa-envelope"></i>
+                <div class="row-content">
+                    <span>Email</span>
+                    <span id="uiEmail" class="secondary-text">johndoe@gmail.com</span>
+                </div>
+            </div>
+            <div class="row">
+                <i class="fa-solid fa-shield-halved"></i>
+                <div class="row-content">
+                    <span>Age verification</span>
+                </div>
+                <i class="fa-solid fa-chevron-right chevron"></i>
+            </div>
+            <div class="row">
+                <i class="fa-solid fa-square-plus"></i>
+                <div class="row-content">
+                    <span>Subscription</span>
+                    <span class="blue-text">Free Plan</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateIdentity() {
+            // Get values from the input form
+            const fullName = document.getElementById('inputName').value || "New User";
+            const email = document.getElementById('inputEmail').value || "user@example.com";
+
+            // Generate initials
+            const nameParts = fullName.split(" ");
+            let initials = "";
+            if(nameParts.length > 1) {
+                initials = nameParts[0][0] + nameParts[1][0];
+            } else {
+                initials = nameParts[0][0] + (nameParts[0][1] || "");
+            }
+
+            // Update UI Elements
+            document.getElementById('uiFullName').innerText = fullName.toUpperCase();
+            document.getElementById('uiInitials').innerText = initials.toUpperCase();
+            document.getElementById('uiEmail').innerText = email;
+            
+            // Create a simple handle from the name
+            const handle = fullName.toLowerCase().replace(/\s+/g, '') + Math.floor(Math.random() * 100);
+            document.getElementById('uiHandle').innerText = handle;
+        }
+    </script>-->
+</body>
+</html>
